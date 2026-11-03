@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="id" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+  <!-- Primary Meta Tags -->
+  <title>Agung Deriko Nainggolan | Web & Mobile Developer Portfolio</title>
+  <meta name="title" content="Agung Deriko Nainggolan | Web & Mobile Developer Portfolio" />
+  <meta name="description" content="Portofolio resmi Agung Deriko Nainggolan - Lulusan D4 Teknik Informatika ULBI (IPK 3.67). Spesialisasi Frontend Development (React, Tailwind) & Mobile Development (Flutter, FlutterFlow)." />
+  <meta name="keywords" content="Agung Deriko Nainggolan, Frontend Developer, Mobile Developer, Flutter, React JS, FlutterFlow, ULBI, Portfolio Developer Indonesia, CV Digisolf" />
+  <meta name="author" content="Agung Deriko Nainggolan" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Agung Deriko Nainggolan | Web & Mobile Developer" />
+  <meta property="og:description" content="Lulusan D4 Teknik Informatika ULBI (IPK 3.67). Pengalaman di CV Digisolf, React, Flutter, Go, dan Machine Learning." />
+  <meta property="og:image" content="assets/agung-hero.png" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>" />
+
+  <!-- Tailwind CSS CDN with Custom Plugins -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            zinc: {
+              950: '#09090b',
+              900: '#121217',
+              850: '#18181f',
+              800: '#27272a'
+            },
+            rose: {
+              400: '#fb7185',
+              500: '#f43f5e',
+              600: '#e11d48',
+              700: '#be123c'
+            },
+            amber: {
+              400: '#fbbf24',
+              500: '#f59e0b',
+              600: '#d97706'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            display: ['Syne', 'sans-serif'],
+            heading: ['"Space Grotesk"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="bg-zinc-950 text-zinc-100 antialiased selection:bg-rose-500 selection:text-white relative min-h-screen">
+
+  <!-- Interactive Aceternity-style Mouse Spotlight Glow -->
+  <div class="mouse-spotlight"></div>
+
+  <!-- Ambient Glowing Background Aura Orbs -->
+  <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+    <div class="absolute -top-40 -left-40 w-96 h-96 bg-rose-600/15 rounded-full blur-[140px] animate-pulse-glow"></div>
+    <div class="absolute top-1/3 -right-40 w-[500px] h-[500px] bg-amber-500/10 rounded-full blur-[160px] animate-pulse-glow" style="animation-delay: -3s;"></div>
+    <div class="absolute -bottom-40 left-1/3 w-[600px] h-[600px] bg-rose-700/10 rounded-full blur-[180px] animate-pulse-glow" style="animation-delay: -5s;"></div>
+    <div class="absolute inset-0 bg-grid-pattern opacity-40"></div>
+  </div>
+
+  <!-- ==================== HEADER & NAVBAR ==================== -->
+  <header id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-4 px-4 sm:px-6 lg:px-8 bg-transparent">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <!-- Logo -->
+      <a href="#hero" class="flex items-center gap-2 group">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-600 to-amber-500 p-[1.5px] shadow-lg group-hover:scale-105 transition duration-300">
+          <div class="w-full h-full bg-zinc-950 rounded-[10px] flex items-center justify-center">
+            <span class="font-display font-bold text-white text-base tracking-wider group-hover:text-rose-400 transition">AD</span>
+          </div>
+        </div>
+        <div class="hidden sm:block">
+          <span class="font-heading font-bold text-base text-white tracking-tight group-hover:text-rose-400 transition">Agung Nainggolan</span>
+          <span class="block text-[10px] font-mono text-zinc-400 leading-none">Frontend & Mobile Dev</span>
+        </div>
+      </a>
+
+      <!-- Desktop Nav Links -->
+      <nav class="hidden md:flex items-center gap-1 glass-card px-4 py-2 rounded-full border border-white/10 shadow-xl">
+        <a href="#about" class="nav-link px-3 py-1 text-xs font-semibold text-zinc-300 hover:text-rose-400 transition" data-i18n-id="Tentang" data-i18n-en="About">Tentang</a>
+        <a href="#education" class="nav-link px-3 py-1 text-xs font-semibold text-zinc-300 hover:text-rose-400 transition" data-i18n-id="Pendidikan" data-i18n-en="Education">Pendidikan</a>
+        <a href="#skills" class="nav-link px-3 py-1 text-xs font-semibold text-zinc-300 hover:text-rose-400 transition" data-i18n-id="Keahlian" data-i18n-en="Skills">Keahlian</a>
+        <a href="#experience" class="nav-link px-3 py-1 text-xs font-semibold text-zinc-300 hover:text-rose-400 transition" data-i18n-id="Pengalaman" data-i18n-en="Experience">Pengalaman</a>
+        <a href="#projects" class="nav-link px-3 py-1 text-xs font-semibold text-zinc-300 hover:text-rose-400 transition" data-i18n-id="Portofolio" data-i18n-en="Projects">Portofolio</a>
+        <a href="#research" class="nav-link px-3 py-1 text-xs font-semibold text-zinc-300 hover:text-rose-400 transition" data-i18n-id="Riset ML" data-i18n-en="ML Research">Riset ML</a>
+        <a href="#certificates" class="nav-link px-3 py-1 text-xs font-semibold text-zinc-300 hover:text-rose-400 transition" data-i18n-id="Sertifikat" data-i18n-en="Certificates">Sertifikat</a>
+        <a href="#contact" class="nav-link px-3 py-1 text-xs font-semibold text-zinc-300 hover:text-rose-400 transition" data-i18n-id="Kontak" data-i18n-en="Contact">Kontak</a>
+      </nav>
+
+      <!-- Right Action Controls -->
+      <div class="flex items-center gap-2.5">
+        <!-- Language Switcher Button -->
+        <button 
+          id="lang-toggle-btn" 
+          class="flex items-center gap-1.5 px-3 py-1.5 rounded-full glass-card border border-white/10 hover:border-rose-500/40 text-xs font-mono font-semibold text-zinc-300 hover:text-white transition"
+          title="Ganti Bahasa / Switch Language"
+        >
+          <i data-lucide="globe" class="w-3.5 h-3.5 text-rose-400"></i>
+          <span id="current-lang-label">ID</span>
+        </button>
+
+        <!-- CTA Hire Me / WhatsApp -->
+        <a 
+          href="https://wa.me/6282360711385?text=Halo%20Agung,%20saya%20tertarik%20dengan%20profil%20Anda" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-rose-600 via-rose-500 to-amber-500 hover:opacity-95 text-white font-semibold text-xs shadow-lg shadow-rose-600/25 transition transform hover:scale-105"
+        >
+          <i data-lucide="send" class="w-3.5 h-3.5"></i>
+          <span data-i18n-id="Hubungi Saya" data-i18n-en="Get in Touch">Hubungi Saya</span>
+        </a>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button 
+          id="mobile-menu-btn" 
+          class="md:hidden p-2 rounded-xl glass-card border border-white/10 text-zinc-300 hover:text-white transition"
+          aria-label="Toggle menu"
+        >
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Dropdown Menu -->
+    <div id="mobile-menu" class="hidden md:hidden max-w-7xl mx-auto mt-3 glass-card rounded-2xl p-4 border border-white/10 shadow-2xl">
+      <nav class="flex flex-col space-y-2">
+        <a href="#about" class="mobile-nav-link px-3 py-2 rounded-lg hover:bg-white/5 text-sm font-semibold text-zinc-300 hover:text-rose-400 transition" data-i18n-id="Tentang Saya" data-i18n-en="About Me">Tentang Saya</a>
+        <a href="#education" class="mobile-nav-link px-3 py-2 rounded-lg hover:bg-white/5 text-sm font-semibold text-zinc-300 hover:text-rose-400 transition" data-i18n-id="Pendidikan" data-i18n-en="Education">Pendidikan</a>
+        <a href="#skills" class="mobile-nav-link px-3 py-2 rounded-lg hover:bg-white/5 text-sm font-semibold text-zinc-300 hover:text-rose-400 transition" data-i18n-id="Keahlian & Tech Stack" data-i18n-en="Skills & Tech Stack">Keahlian & Tech Stack</a>
+        <a href="#experience" class="mobile-nav-link px-3 py-2 rounded-lg hover:bg-white/5 text-sm font-semibold text-zinc-300 hover:text-rose-400 transition" data-i18n-id="Pengalaman Kerja" data-i18n-en="Work Experience">Pengalaman Kerja</a>
+        <a href="#projects" class="mobile-nav-link px-3 py-2 rounded-lg hover:bg-white/5 text-sm font-semibold text-zinc-300 hover:text-rose-400 transition" data-i18n-id="Proyek Portofolio" data-i18n-en="Portfolio Projects">Proyek Portofolio</a>
+        <a href="#research" class="mobile-nav-link px-3 py-2 rounded-lg hover:bg-white/5 text-sm font-semibold text-zinc-300 hover:text-rose-400 transition" data-i18n-id="Riset Skripsi XGBoost" data-i18n-en="XGBoost ML Research">Riset Skripsi XGBoost</a>
+        <a href="#certificates" class="mobile-nav-link px-3 py-2 rounded-lg hover:bg-white/5 text-sm font-semibold text-zinc-300 hover:text-rose-400 transition" data-i18n-id="Sertifikasi" data-i18n-en="Certifications">Sertifikasi</a>
+        <a href="#contact" class="mobile-nav-link px-3 py-2 rounded-lg hover:bg-white/5 text-sm font-semibold text-zinc-300 hover:text-rose-400 transition" data-i18n-id="Hubungi Saya" data-i18n-en="Contact Me">Hubungi Saya</a>
+      </nav>
+      <div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between">
+        <a 
+          href="assets/cv_agung_deriko_nainggolan.pdf" 
+          download 
+          class="flex items-center gap-1.5 text-xs font-semibold text-rose-400 hover:text-rose-300"
+        >
+          <i data-lucide="download" class="w-3.5 h-3.5"></i> Download CV (PDF)
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== MAIN CONTENT ==================== -->
+  <main class="relative z-10 pt-28 sm:pt-36">
+
+    <!-- HERO SECTION -->
+    <section id="hero" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 md:pb-28">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <!-- Hero Text Column -->
+        <div class="lg:col-span-7 space-y-6">
+          <!-- Status Pill -->
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+            <span data-i18n-id="Tersedia untuk Peluang Frontend & Mobile" data-i18n-en="Open to Frontend & Mobile Engineering Roles">
+              Tersedia untuk Peluang Frontend & Mobile
+            </span>
+          </div>
+
+          <!-- Main Headlines -->
+          <div class="space-y-2">
+            <h2 class="text-sm uppercase font-mono tracking-widest text-zinc-400">
+              <span data-i18n-id="PORTOFOLIO PENGEMBANG" data-i18n-en="DEVELOPER PORTFOLIO">PORTOFOLIO PENGEMBANG</span>
+            </h2>
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight font-display text-white">
+              Agung Deriko <span class="text-gradient-accent">Nainggolan</span>
+            </h1>
+            <p class="text-lg sm:text-xl font-bold font-heading text-zinc-300 flex items-center gap-2 flex-wrap">
+              <span class="text-rose-400 font-mono">//</span>
+              <span>Web and Mobile Developer</span>
+              <span class="hidden sm:inline text-zinc-600">•</span>
+              <span class="text-zinc-400 font-normal text-base">Informatics Engineering ULBI (IPK 3.67)</span>
+            </p>
+          </div>
+
+          <!-- Summary Intro -->
+          <p class="text-zinc-400 text-sm sm:text-base leading-relaxed max-w-2xl" data-i18n-id="Lulusan D4 Teknik Informatika Universitas Logistik dan Bisnis Internasional (ULBI) dengan keahlian mendalam pada Frontend & Mobile Development. Berpengalaman membangun aplikasi nyata menggunakan React, Flutter, dan FlutterFlow, mengintegrasikan REST API, manajemen state, serta riset terapan Machine Learning." data-i18n-en="Informatics Engineering graduate from ULBI (GPA 3.67/4.00) specializing in Frontend & Mobile Development. Experienced in building production web and cross-platform apps with React, Flutter, and FlutterFlow, REST API integration, state management, and applied Machine Learning.">
+            Lulusan D4 Teknik Informatika Universitas Logistik dan Bisnis Internasional (ULBI) dengan keahlian mendalam pada Frontend & Mobile Development. Berpengalaman membangun aplikasi nyata menggunakan React, Flutter, dan FlutterFlow, mengintegrasikan REST API, manajemen state, serta riset terapan Machine Learning.
+          </p>
+
+          <!-- Action Buttons -->
+          <div class="flex flex-wrap items-center gap-3 pt-2">
+            <a 
+              href="#projects" 
+              class="px-6 py-3 rounded-xl bg-gradient-to-r from-rose-600 via-rose-500 to-amber-500 hover:from-rose-500 hover:to-amber-600 text-white font-bold text-sm shadow-xl shadow-rose-600/20 flex items-center gap-2 transition transform hover:-translate-y-0.5"
+            >
+              <i data-lucide="layers" class="w-4 h-4"></i>
+              <span data-i18n-id="Jelajahi Portofolio" data-i18n-en="Explore Projects">Jelajahi Portofolio</span>
+            </a>
+
+            <a 
+              href="assets/cv_agung_deriko_nainggolan.pdf" 
+              download 
+              class="px-6 py-3 rounded-xl glass-card border border-white/15 hover:border-rose-500/40 text-white font-bold text-sm flex items-center gap-2 transition hover:bg-white/10"
+            >
+              <i data-lucide="download" class="w-4 h-4 text-amber-400"></i>
+              <span data-i18n-id="Unduh Resume (PDF)" data-i18n-en="Download Resume (PDF)">Unduh Resume (PDF)</span>
+            </a>
+
+            <button 
+              onclick="copyToClipboard('agung.nainggolan8008@gmail.com', 'Email agung.nainggolan8008@gmail.com disalin!')" 
+              class="p-3 rounded-xl glass-card border border-white/10 hover:border-white/25 text-zinc-300 hover:text-white transition"
+              title="Salin Email / Copy Email"
+            >
+              <i data-lucide="copy" class="w-4 h-4"></i>
+            </button>
+
+            <a 
+              href="https://github.com/agung6544" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              class="p-3 rounded-xl glass-card border border-white/10 hover:border-white/25 text-zinc-300 hover:text-white transition"
+              title="GitHub Profile"
+            >
+              <i data-lucide="github" class="w-4 h-4"></i>
+            </a>
+          </div>
+
+          <!-- Quick Stats Cards Row -->
+          <div id="hero-stats" class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6 border-t border-white/5">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Hero Portrait Visual Column -->
+        <div class="lg:col-span-5 relative flex justify-center">
+          <!-- Background Glow Mesh -->
+          <div class="absolute inset-0 bg-gradient-to-tr from-rose-600/25 via-amber-500/15 to-transparent rounded-3xl blur-2xl transform rotate-3 scale-95 pointer-events-none"></div>
+
+          <!-- Main Image Frame -->
+          <div class="relative w-full max-w-md rounded-3xl overflow-hidden glass-card border border-white/20 p-2.5 shadow-2xl group">
+            <div class="relative rounded-2xl overflow-hidden bg-gradient-to-b from-zinc-800 to-zinc-950 aspect-[4/5] flex items-end justify-center">
+              <img 
+                src="assets/agung-hero.png" 
+                alt="Agung Deriko Nainggolan" 
+                class="w-full h-full object-cover object-top filter brightness-105 contrast-105 group-hover:scale-105 transition duration-700" 
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent"></div>
+
+              <!-- Overlay Card Badge inside image -->
+              <div class="absolute bottom-4 left-4 right-4 p-3.5 rounded-xl bg-zinc-950/85 backdrop-blur-md border border-white/10 shadow-xl flex items-center justify-between">
+                <div>
+                  <h3 class="text-sm font-bold text-white font-heading">Agung Deriko Nainggolan</h3>
+                  <p class="text-xs text-rose-400 font-mono">D4 Teknik Informatika ULBI</p>
+                </div>
+                <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-rose-500/15 border border-rose-500/30 text-rose-300 text-xs font-mono">
+                  <i data-lucide="code" class="w-3.5 h-3.5"></i>
+                  <span>Dev</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Floating Tech Badges (Aceternity style) -->
+            <div class="absolute -top-3 -right-3 px-3 py-1.5 rounded-xl bg-zinc-900/90 backdrop-blur-md border border-rose-500/30 text-xs font-mono font-bold text-white shadow-xl flex items-center gap-2 animate-float">
+              <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+              <span>React.js</span>
+            </div>
+
+            <div class="absolute top-1/2 -left-5 px-3 py-1.5 rounded-xl bg-zinc-900/90 backdrop-blur-md border border-amber-500/30 text-xs font-mono font-bold text-white shadow-xl flex items-center gap-2 animate-float-reverse">
+              <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+              <span>Flutter & Dart</span>
+            </div>
+
+            <div class="absolute -bottom-3 -right-2 px-3 py-1.5 rounded-xl bg-zinc-900/90 backdrop-blur-md border border-emerald-500/30 text-xs font-mono font-bold text-white shadow-xl flex items-center gap-2 animate-float">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <span>Golang & Mongo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section id="about" class="py-20 md:py-28 border-t border-white/5 bg-zinc-950/60">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Section Header -->
+        <div class="flex flex-col items-center text-center max-w-2xl mx-auto mb-16">
+          <span class="badge-pill text-rose-400 border-rose-500/20 bg-rose-500/10 font-mono text-xs mb-3">
+            <i data-lucide="user" class="w-3 h-3"></i> TENTANG SAYA
+          </span>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-white font-heading tracking-tight">
+            Membangun Solusi Digital yang <span class="text-gradient-accent">Adaptif & Kreatif</span>
+          </h2>
+          <p class="text-sm text-zinc-400 mt-3" data-i18n-id="Kombinasi antara ketajaman logika rekayasa perangkat lunak dan kepekaan desain pengalaman pengguna." data-i18n-en="Bridging technical software engineering rigor with modern responsive user-centric experiences.">
+            Kombinasi antara ketajaman logika rekayasa perangkat lunak dan kepekaan desain pengalaman pengguna.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          <!-- Photo & Personal Info Card -->
+          <div class="lg:col-span-5 flex flex-col gap-6">
+            <div class="glass-card p-6 rounded-3xl border border-white/10 relative overflow-hidden">
+              <div class="flex items-center gap-5">
+                <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden border border-white/15 bg-zinc-900 flex-shrink-0 shadow-lg">
+                  <img src="assets/agung-about.png" alt="Agung Deriko Nainggolan" class="w-full h-full object-cover object-top hover:scale-110 transition duration-500" />
+                </div>
+                <div>
+                  <h3 class="text-lg font-bold text-white font-heading">Agung Deriko Nainggolan</h3>
+                  <p class="text-xs font-mono text-rose-400">D4 Teknik Informatika - ULBI</p>
+                  <p class="text-xs text-zinc-400 mt-1 flex items-center gap-1">
+                    <i data-lucide="map-pin" class="w-3 h-3 text-amber-400"></i> Bandung / Pematangsiantar
+                  </p>
+                  <div class="mt-3 flex items-center gap-2">
+                    <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                      IPK 3.67 / 4.00
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quick Info List -->
+              <div class="mt-6 pt-5 border-t border-white/5 space-y-2 text-xs font-mono text-zinc-300">
+                <div class="flex justify-between py-1 border-b border-white/[0.03]">
+                  <span class="text-zinc-500">Status:</span>
+                  <span class="text-white font-semibold">Fresh Graduate / Engineer</span>
+                </div>
+                <div class="flex justify-between py-1 border-b border-white/[0.03]">
+                  <span class="text-zinc-500">Keahlian Utama:</span>
+                  <span class="text-rose-400 font-semibold">Frontend & Mobile</span>
+                </div>
+                <div class="flex justify-between py-1 border-b border-white/[0.03]">
+                  <span class="text-zinc-500">Bahasa:</span>
+                  <span class="text-white">Indonesia, Inggris (TOEIC 655)</span>
+                </div>
+                <div class="flex justify-between py-1">
+                  <span class="text-zinc-500">Pengalaman:</span>
+                  <span class="text-amber-400">CV Digisolf & PMK ULBI</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Paragraph Narrative & Pillars -->
+          <div class="lg:col-span-7 space-y-6">
+            <div id="about-paragraphs" class="space-y-4 text-sm sm:text-base leading-relaxed text-zinc-300">
+              <!-- Rendered by JS -->
+            </div>
+
+            <!-- 4 Engineering Pillars Grid -->
+            <div id="about-pillars" class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EDUCATION SECTION -->
+    <section id="education" class="py-20 md:py-28 border-t border-white/5">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col items-center text-center max-w-2xl mx-auto mb-16">
+          <span class="badge-pill text-amber-400 border-amber-500/20 bg-amber-500/10 font-mono text-xs mb-3">
+            <i data-lucide="graduation-cap" class="w-3 h-3"></i> RIWAYAT AKADEMIS
+          </span>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-white font-heading tracking-tight">
+            Pendidikan & <span class="text-gradient-gold">Fondasi Keilmuan</span>
+          </h2>
+          <p class="text-sm text-zinc-400 mt-2">
+            Perjalanan akademik yang membentuk keahlian rekayasa, pemodelan data, dan problem solving.
+          </p>
+        </div>
+
+        <div id="education-list" class="max-w-4xl mx-auto space-y-6">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- TECH STACK & SKILLS SECTION -->
+    <section id="skills" class="py-20 md:py-28 border-t border-white/5 bg-zinc-950/60">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col items-center text-center max-w-2xl mx-auto mb-12">
+          <span class="badge-pill text-rose-400 border-rose-500/20 bg-rose-500/10 font-mono text-xs mb-3">
+            <i data-lucide="cpu" class="w-3 h-3"></i> TECH STACK & KEMAMPUAN
+          </span>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-white font-heading tracking-tight">
+            Teknologi & <span class="text-gradient-accent">Keahlian Rekayasa</span>
+          </h2>
+          <p class="text-sm text-zinc-400 mt-2">
+            Perangkat lunak, framework, dan perkakas pengembangan yang saya gunakan dalam membangun aplikasi tangguh.
+          </p>
+
+          <!-- Category Filter Tabs -->
+          <div class="flex flex-wrap items-center justify-center gap-2 mt-8">
+            <button class="tech-filter-btn active px-4 py-2 rounded-xl text-xs font-semibold bg-rose-500 text-white transition" data-filter="all">Semua Tech Stack</button>
+            <button class="tech-filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white/5 text-zinc-400 hover:text-white transition" data-filter="frontend">Frontend</button>
+            <button class="tech-filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white/5 text-zinc-400 hover:text-white transition" data-filter="mobile">Mobile</button>
+            <button class="tech-filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white/5 text-zinc-400 hover:text-white transition" data-filter="backend">Backend & DB</button>
+            <button class="tech-filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white/5 text-zinc-400 hover:text-white transition" data-filter="tools">Tools, AI & ML</button>
+          </div>
+        </div>
+
+        <div id="tech-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- WORK & ORGANIZATIONAL EXPERIENCE SECTION -->
+    <section id="experience" class="py-20 md:py-28 border-t border-white/5">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col items-center text-center max-w-2xl mx-auto mb-16">
+          <span class="badge-pill text-rose-400 border-rose-500/20 bg-rose-500/10 font-mono text-xs mb-3">
+            <i data-lucide="briefcase" class="w-3 h-3"></i> PENGALAMAN KERJA & ORGANISASI
+          </span>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-white font-heading tracking-tight">
+            Jejak Karier & <span class="text-gradient-accent">Kepemimpinan</span>
+          </h2>
+          <p class="text-sm text-zinc-400 mt-2">
+            Pengalaman nyata dalam pengembangan perangkat lunak industri dan kepengurusan organisasi.
+          </p>
+        </div>
+
+        <div id="experience-timeline" class="max-w-4xl mx-auto">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURED PROJECTS BENTO GRID SECTION -->
+    <section id="projects" class="py-20 md:py-28 border-t border-white/5 bg-zinc-950/60">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col items-center text-center max-w-3xl mx-auto mb-12">
+          <span class="badge-pill text-rose-400 border-rose-500/20 bg-rose-500/10 font-mono text-xs mb-3">
+            <i data-lucide="layers" class="w-3 h-3"></i> PROYEK TERPILIH
+          </span>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-white font-heading tracking-tight">
+            Koleksi Karya & <span class="text-gradient-accent">Produk Digital</span>
+          </h2>
+          <p class="text-sm text-zinc-400 mt-2" data-i18n-id="Kombinasi aplikasi web full-stack, mobile cross-platform, pemeliharaan sistem industri, serta riset terapan machine learning." data-i18n-en="A showcase of full-stack web applications, cross-platform mobile apps, industrial system maintenance, and applied ML research.">
+            Kombinasi aplikasi web full-stack, mobile cross-platform, pemeliharaan sistem industri, serta riset terapan machine learning.
+          </p>
+
+          <!-- Project Filter Tabs -->
+          <div class="flex flex-wrap items-center justify-center gap-2 mt-8">
+            <button class="project-filter-btn active px-4 py-2 rounded-xl text-xs font-semibold bg-rose-500 text-white transition" data-filter="all">Semua Proyek</button>
+            <button class="project-filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white/5 text-zinc-400 hover:text-white transition" data-filter="web">Aplikasi Web</button>
+            <button class="project-filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white/5 text-zinc-400 hover:text-white transition" data-filter="mobile">Aplikasi Mobile</button>
+            <button class="project-filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white/5 text-zinc-400 hover:text-white transition" data-filter="research">Riset & AI</button>
+          </div>
+        </div>
+
+        <div id="project-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <!-- Rendered dynamically by JS into Bento Grid -->
+        </div>
+      </div>
+    </section>
+
+    <!-- RESEARCH & THESIS DEEP DIVE SPOTLIGHT -->
+    <section id="research" class="py-20 md:py-28 border-t border-white/5">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="glass-card p-8 md:p-12 rounded-3xl border border-amber-500/20 relative overflow-hidden">
+          <!-- Ambient Glow -->
+          <div class="absolute -top-24 -right-24 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div class="lg:col-span-7 space-y-5">
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-mono">
+                <i data-lucide="bar-chart-2" class="w-3.5 h-3.5"></i>
+                <span>Riset Tugas Akhir / Scientific Thesis</span>
+              </div>
+
+              <h3 class="text-2xl sm:text-3xl font-extrabold text-white font-heading leading-tight">
+                Representasi Fitur Kategorikal untuk Peramalan Penjualan Menu Mingguan dengan <span class="text-gradient-gold">XGBoost</span>
+              </h3>
+
+              <p class="text-sm text-zinc-300 leading-relaxed">
+                Penelitian ini mengevaluasi performa representasi fitur kategorikal pada data penjualan Point-of-Sale (POS) riil sebanyak <strong>2.646 transaksi</strong>. Pengujian membuktikan bahwa <strong>Category Item ID</strong> mengungguli One-Hot Encoding pada seluruh metrik evaluasi.
+              </p>
+
+              <!-- Metrics Summary Cards -->
+              <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">
+                <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+                  <span class="text-xs text-zinc-400 font-mono">Akurasi Terbaik</span>
+                  <div class="text-2xl font-black text-amber-400 font-heading mt-0.5">16,36%</div>
+                  <span class="text-[10px] text-zinc-500 font-mono">WAPE (Category Item ID)</span>
+                </div>
+
+                <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+                  <span class="text-xs text-zinc-400 font-mono">Fitur Dominan</span>
+                  <div class="text-2xl font-black text-rose-400 font-heading mt-0.5">±34%</div>
+                  <span class="text-[10px] text-zinc-500 font-mono">Kontribusi Lag-1 Sales</span>
+                </div>
+
+                <div class="p-4 rounded-xl bg-white/5 border border-white/10 col-span-2 sm:col-span-1">
+                  <span class="text-xs text-zinc-400 font-mono">Deployment</span>
+                  <div class="text-xl font-bold text-white font-heading mt-1 flex items-center gap-1.5">
+                    <i data-lucide="activity" class="w-4 h-4 text-emerald-400"></i> Streamlit
+                  </div>
+                  <span class="text-[10px] text-zinc-500 font-mono">Interactive Dashboard</span>
+                </div>
+              </div>
+
+              <!-- Quick Action -->
+              <div class="pt-4 flex items-center gap-3">
+                <button 
+                  onclick="openProjectModal('research-xgboost')" 
+                  class="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-zinc-950 font-bold text-xs shadow-lg shadow-amber-500/20 flex items-center gap-2 transition"
+                >
+                  <i data-lucide="eye" class="w-4 h-4"></i>
+                  <span>Lihat Tabel Komparasi Lengkap</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Dashboard Preview Visual -->
+            <div class="lg:col-span-5">
+              <div class="rounded-2xl overflow-hidden border border-white/15 bg-zinc-900 shadow-2xl group cursor-pointer" onclick="openProjectModal('research-xgboost')">
+                <img 
+                  src="assets/research-dashboard.png" 
+                  alt="Dashboard Prediksi Streamlit" 
+                  class="w-full h-auto object-cover group-hover:scale-105 transition duration-500" 
+                />
+                <div class="p-3 bg-zinc-950/80 border-t border-white/10 text-center">
+                  <span class="text-xs font-mono text-zinc-400 flex items-center justify-center gap-1">
+                    <i data-lucide="layout-dashboard" class="w-3.5 h-3.5 text-amber-400"></i> Antarmuka Dashboard Prediksi Streamlit
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CERTIFICATES & CREDENTIALS SECTION -->
+    <section id="certificates" class="py-20 md:py-28 border-t border-white/5 bg-zinc-950/60">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col items-center text-center max-w-2xl mx-auto mb-16">
+          <span class="badge-pill text-amber-400 border-amber-500/20 bg-amber-500/10 font-mono text-xs mb-3">
+            <i data-lucide="award" class="w-3 h-3"></i> SERTIFIKASI & KOMPETENSI
+          </span>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-white font-heading tracking-tight">
+            Kredensial & <span class="text-gradient-gold">Sertifikat Resmi</span>
+          </h2>
+          <p class="text-sm text-zinc-400 mt-2">
+            Sertifikasi industri, pemrograman, manajemen proyek, dan kemampuan bahasa Inggris terverifikasi.
+          </p>
+        </div>
+
+        <div id="cert-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- DEVELOPER TERMINAL INTERACTIVE EASTER EGG -->
+    <section class="py-16 border-t border-white/5">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="terminal-window">
+          <div class="terminal-header justify-between">
+            <div class="flex items-center gap-2">
+              <span class="terminal-btn red"></span>
+              <span class="terminal-btn yellow"></span>
+              <span class="terminal-btn green"></span>
+              <span class="text-xs text-zinc-400 font-mono ml-2">agung@portfolio-cli: ~ (bash)</span>
+            </div>
+            <div class="text-[11px] font-mono text-zinc-500 hidden sm:block">
+              Interactive Dev Terminal
+            </div>
+          </div>
+
+          <div class="terminal-body" id="terminal-output">
+            <div class="text-zinc-400">
+              Welcome to Agung's Developer Console v1.0.0<br/>
+              Ketik <span class="text-rose-400 font-bold">help</span> untuk melihat daftar perintah, atau klik tombol di bawah untuk eksplorasi cepat:
+            </div>
+          </div>
+
+          <!-- Quick Command Chips -->
+          <div class="p-3 bg-white/[0.01] border-t border-white/5 flex flex-wrap gap-1.5 text-xs font-mono">
+            <button onclick="document.getElementById('terminal-input').value='about'; document.getElementById('terminal-input').dispatchEvent(new KeyboardEvent('keydown', {'key': 'Enter'}))" class="px-2.5 py-1 rounded bg-white/5 hover:bg-white/10 text-rose-400 transition">$ about</button>
+            <button onclick="document.getElementById('terminal-input').value='skills'; document.getElementById('terminal-input').dispatchEvent(new KeyboardEvent('keydown', {'key': 'Enter'}))" class="px-2.5 py-1 rounded bg-white/5 hover:bg-white/10 text-cyan-400 transition">$ skills</button>
+            <button onclick="document.getElementById('terminal-input').value='projects'; document.getElementById('terminal-input').dispatchEvent(new KeyboardEvent('keydown', {'key': 'Enter'}))" class="px-2.5 py-1 rounded bg-white/5 hover:bg-white/10 text-amber-400 transition">$ projects</button>
+            <button onclick="document.getElementById('terminal-input').value='stats'; document.getElementById('terminal-input').dispatchEvent(new KeyboardEvent('keydown', {'key': 'Enter'}))" class="px-2.5 py-1 rounded bg-white/5 hover:bg-white/10 text-emerald-400 transition">$ stats</button>
+            <button onclick="document.getElementById('terminal-input').value='contact'; document.getElementById('terminal-input').dispatchEvent(new KeyboardEvent('keydown', {'key': 'Enter'}))" class="px-2.5 py-1 rounded bg-white/5 hover:bg-white/10 text-purple-400 transition">$ contact</button>
+            <button onclick="document.getElementById('terminal-input').value='clear'; document.getElementById('terminal-input').dispatchEvent(new KeyboardEvent('keydown', {'key': 'Enter'}))" class="px-2.5 py-1 rounded bg-white/5 hover:bg-white/10 text-zinc-500 transition">$ clear</button>
+          </div>
+
+          <div class="px-4 pb-3 terminal-input-row">
+            <span class="text-rose-500 font-mono text-sm font-bold">agung@portfolio:~$</span>
+            <input 
+              type="text" 
+              id="terminal-input" 
+              class="terminal-input" 
+              placeholder="ketik perintah di sini (e.g. help, about, skills, contact)..." 
+              autocomplete="off" 
+              spellcheck="false" 
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT & HIRE ME SECTION -->
+    <section id="contact" class="py-20 md:py-28 border-t border-white/5 bg-zinc-950/80">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto text-center mb-16">
+          <span class="badge-pill text-rose-400 border-rose-500/20 bg-rose-500/10 font-mono text-xs mb-3">
+            <i data-lucide="message-square" class="w-3 h-3"></i> MARI BERKOLABORASI
+          </span>
+          <h2 class="text-3xl sm:text-5xl font-extrabold text-white font-display tracking-tight">
+            Siap Berkontribusi di <span class="text-gradient-accent">Tim Anda</span>
+          </h2>
+          <p class="text-sm sm:text-base text-zinc-400 mt-4 leading-relaxed" data-i18n-id="Tertarik untuk merekrut saya sebagai Frontend / Mobile Developer, mendiskusikan peluang proyek, atau sekadar berdiskusi teknis? Silakan hubungi saya melalui jalur berikut." data-i18n-en="Interested in hiring me as a Frontend / Mobile Developer, discussing project opportunities, or simply having a technical chat? Feel free to reach out.">
+            Tertarik untuk merekrut saya sebagai Frontend / Mobile Developer, mendiskusikan peluang proyek, atau sekadar berdiskusi teknis? Silakan hubungi saya melalui jalur berikut.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          <!-- WhatsApp Card -->
+          <a 
+            href="https://wa.me/6282360711385?text=Halo%20Agung,%20saya%20melihat%20portofolio%20Anda" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="glass-card p-6 rounded-2xl border border-white/10 hover:border-emerald-500/40 transition group flex flex-col justify-between"
+          >
+            <div>
+              <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-emerald-500 group-hover:text-white transition">
+                <i data-lucide="phone" class="w-6 h-6"></i>
+              </div>
+              <h4 class="text-lg font-bold text-white font-heading">WhatsApp Direct</h4>
+              <p class="text-xs text-zinc-400 mt-1 leading-relaxed">Respon cepat untuk diskusi pekerjaan dan kolaborasi proyek.</p>
+            </div>
+            <div class="mt-6 pt-4 border-t border-white/5 flex items-center justify-between text-xs font-mono text-emerald-400 font-semibold">
+              <span>+62 823-6071-1385</span>
+              <i data-lucide="arrow-up-right" class="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition"></i>
+            </div>
+          </a>
+
+          <!-- Email Card -->
+          <div class="glass-card p-6 rounded-2xl border border-white/10 hover:border-rose-500/40 transition group flex flex-col justify-between">
+            <div>
+              <div class="w-12 h-12 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-rose-500 group-hover:text-white transition">
+                <i data-lucide="mail" class="w-6 h-6"></i>
+              </div>
+              <h4 class="text-lg font-bold text-white font-heading">Email Resmi</h4>
+              <p class="text-xs text-zinc-400 mt-1 leading-relaxed">Kirimkan undangan rekrutmen atau tawaran kerja resmi.</p>
+            </div>
+            <div class="mt-6 pt-4 border-t border-white/5 flex items-center justify-between">
+              <a href="mailto:agung.nainggolan8008@gmail.com" class="text-xs font-mono text-zinc-300 hover:text-white truncate max-w-[170px]">
+                agung.nainggolan8008@gmail.com
+              </a>
+              <button 
+                onclick="copyToClipboard('agung.nainggolan8008@gmail.com', 'Email agung.nainggolan8008@gmail.com disalin!')" 
+                class="p-1.5 rounded-lg bg-white/5 hover:bg-rose-500/20 text-rose-400 transition"
+                title="Salin Email"
+              >
+                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Socials / GitHub / LinkedIn Card -->
+          <div class="glass-card p-6 rounded-2xl border border-white/10 hover:border-cyan-500/40 transition group flex flex-col justify-between">
+            <div>
+              <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-cyan-500 group-hover:text-white transition">
+                <i data-lucide="globe" class="w-6 h-6"></i>
+              </div>
+              <h4 class="text-lg font-bold text-white font-heading">Sosial & Profil</h4>
+              <p class="text-xs text-zinc-400 mt-1 leading-relaxed">Lihat repositori kode dan koneksi profesional saya.</p>
+            </div>
+            <div class="mt-6 pt-4 border-t border-white/5 flex items-center gap-3">
+              <a 
+                href="https://github.com/agung6544" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="flex-1 py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-white text-xs font-semibold flex items-center justify-center gap-1.5 transition"
+              >
+                <i data-lucide="github" class="w-3.5 h-3.5"></i> GitHub
+              </a>
+              <a 
+                href="https://www.linkedin.com/in/agung-deriko-nainggolan" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="flex-1 py-2 px-3 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 text-xs font-semibold flex items-center justify-center gap-1.5 transition"
+              >
+                <i data-lucide="linkedin" class="w-3.5 h-3.5"></i> LinkedIn
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="border-t border-white/10 py-12 px-4 sm:px-6 lg:px-8 bg-zinc-950 relative z-10">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-rose-600 to-amber-500 p-[1px]">
+          <div class="w-full h-full bg-zinc-950 rounded-[7px] flex items-center justify-center">
+            <span class="font-display font-bold text-white text-xs">AD</span>
+          </div>
+        </div>
+        <div class="text-left">
+          <p class="text-xs text-zinc-300 font-bold font-heading">Agung Deriko Nainggolan</p>
+          <p class="text-[11px] text-zinc-500 font-mono">Web & Mobile Developer • ULBI 2026</p>
+        </div>
+      </div>
+
+      <p class="text-xs text-zinc-500 font-mono text-center sm:text-right">
+        Designed & Built with reference from top open-source developer portfolios.<br/>
+        © 2026 Agung Deriko Nainggolan. All rights reserved.
+      </p>
+
+      <!-- Back to Top Button -->
+      <a 
+        href="#hero" 
+        class="w-10 h-10 rounded-full glass-card border border-white/10 hover:border-rose-500/40 text-zinc-400 hover:text-white flex items-center justify-center transition shadow-lg"
+        title="Kembali ke Atas"
+      >
+        <i data-lucide="arrow-up" class="w-4 h-4"></i>
+      </a>
+    </div>
+  </footer>
+
+  <!-- ==================== MODAL CONTAINER (Project & Cert Lightbox) ==================== -->
+  <div 
+    id="modal-container" 
+    class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-md hidden transition-all duration-300"
+  >
+    <div 
+      id="modal-content" 
+      class="glass-card max-w-3xl w-full max-h-[90vh] overflow-y-auto rounded-3xl border border-white/20 shadow-2xl relative bg-zinc-950/95"
+    >
+      <!-- Populated dynamically via JS -->
+    </div>
+  </div>
+
+  <!-- ==================== TOAST NOTIFICATION ==================== -->
+  <div 
+    id="toast" 
+    class="glass-card px-4 py-3 rounded-2xl border border-emerald-500/30 bg-zinc-950/90 text-white text-xs font-mono shadow-2xl flex items-center gap-2.5 backdrop-blur-xl"
+  >
+    <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
+    <span id="toast-message">Teks disalin ke clipboard!</span>
+  </div>
+
+  <!-- Data and Application Logic -->
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

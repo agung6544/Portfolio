@@ -1,0 +1,22 @@
+{
+  "name": "agung-deriko-portfolio",
+  "version": "1.0.0",
+  "description": "Portofolio Modern Web & Mobile Developer - Agung Deriko Nainggolan",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve -l 3000 .",
+    "dev": "npx serve -l 3000 .",
+    "preview": "python -m http.server 8000"
+  },
+  "keywords": [
+    "portfolio",
+    "developer",
+    "frontend",
+    "mobile",
+    "react",
+    "flutter",
+    "tailwindcss"
+  ],
+  "author": "Agung Deriko Nainggolan",
+  "license": "MIT"
+}
