@@ -122,3 +122,4 @@ Buka browser di: `http://localhost:3000`
 - **WhatsApp**: [+62 823-6071-1385](https://wa.me/6282360711385)
 - **GitHub**: [github.com/agung6544](https://github.com/agung6544)
 - **LinkedIn**: [Agung Deriko Nainggolan](https://www.linkedin.com/in/agung-deriko-nainggolan)
+
