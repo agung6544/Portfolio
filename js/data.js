@@ -277,7 +277,10 @@ const portfolioData = {
       techStack: ["React JS", "Tailwind CSS", "Go Language", "MongoDB", "Firebase (FCM)", "REST API"],
       links: {
         github: "https://github.com/agung6544",
-        demo: null
+        demo: "https://syncroapp.github.io/login/",
+        demoLabelId: "Buka SyncroApp",
+        demoLabelEn: "Open SyncroApp",
+        demoType: "web"
       }
     },
     {
@@ -309,7 +312,10 @@ const portfolioData = {
       techStack: ["FlutterFlow", "Flutter", "Dart", "REST API", "FCM", "Mobile UI"],
       links: {
         github: "https://github.com/agung6544",
-        demo: null
+        demo: "https://play.google.com/store/apps/details?id=com.chickenholic.app",
+        demoLabelId: "Google Play Store",
+        demoLabelEn: "Google Play Store",
+        demoType: "playstore"
       }
     },
     {
@@ -339,7 +345,10 @@ const portfolioData = {
       techStack: ["React JS", "JavaScript", "Tailwind CSS", "REST API", "OTP WhatsApp"],
       links: {
         github: "https://github.com/agung6544",
-        demo: "https://legendbadminton.com"
+        demo: "https://legendbadminton.com/",
+        demoLabelId: "Kunjungi Website",
+        demoLabelEn: "Visit Website",
+        demoType: "web"
       }
     },
     {
@@ -371,7 +380,10 @@ const portfolioData = {
       techStack: ["React JS", "Vanilla JS", "Tailwind CSS", "Go Language", "MongoDB"],
       links: {
         github: "https://github.com/agung6544",
-        demo: null
+        demo: "https://sampahkudev.github.io/landing-page/",
+        demoLabelId: "Buka Sampahku",
+        demoLabelEn: "Open Sampahku",
+        demoType: "web"
       }
     },
     {
@@ -416,7 +428,10 @@ const portfolioData = {
       },
       links: {
         github: "https://github.com/agung6544",
-        demo: null
+        demo: "https://qtskxoh94pb2sybdhca9sr.streamlit.app/",
+        demoLabelId: "Dashboard Streamlit",
+        demoLabelEn: "Streamlit Dashboard",
+        demoType: "streamlit"
       }
     }
   ],

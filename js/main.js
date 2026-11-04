@@ -419,10 +419,28 @@
                     href="${proj.links.demo}" 
                     target="_blank" 
                     rel="noopener noreferrer" 
-                    class="text-xs font-semibold px-2.5 py-1 rounded bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 flex items-center gap-1 transition"
+                    class="text-xs font-semibold px-2.5 py-1 rounded ${
+                      proj.links.demoType === 'playstore'
+                        ? 'bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                        : proj.links.demoType === 'streamlit'
+                        ? 'bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30'
+                        : 'bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30'
+                    } flex items-center gap-1.5 transition transform hover:scale-105"
                   >
-                    <i data-lucide="external-link" class="w-3 h-3"></i>
-                    <span>Live Demo</span>
+                    <i data-lucide="${
+                      proj.links.demoType === 'playstore'
+                        ? 'smartphone'
+                        : proj.links.demoType === 'streamlit'
+                        ? 'activity'
+                        : 'external-link'
+                    }" class="w-3 h-3"></i>
+                    <span>${
+                      proj.links.demoType === 'playstore'
+                        ? 'Play Store'
+                        : proj.links.demoType === 'streamlit'
+                        ? 'Streamlit App'
+                        : (currentLang === 'id' ? 'Live Demo' : 'Live Web')
+                    }</span>
                   </a>
                 `
                     : ''
@@ -627,10 +645,28 @@
                 href="${project.links.demo}" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-600 text-white font-semibold text-xs tracking-wide shadow-lg flex items-center gap-2 transition"
+                class="px-5 py-2.5 rounded-xl ${
+                  project.links.demoType === 'playstore'
+                    ? 'bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-600 text-white'
+                    : project.links.demoType === 'streamlit'
+                    ? 'bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-500 text-zinc-950 font-bold'
+                    : 'bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-600 text-white font-semibold'
+                } text-xs tracking-wide shadow-lg flex items-center gap-2 transition transform hover:scale-105"
               >
-                <i data-lucide="external-link" class="w-4 h-4"></i>
-                <span>${currentLang === 'id' ? 'Kunjungi Website Live' : 'Open Live Demo'}</span>
+                <i data-lucide="${
+                  project.links.demoType === 'playstore'
+                    ? 'smartphone'
+                    : project.links.demoType === 'streamlit'
+                    ? 'activity'
+                    : 'external-link'
+                }" class="w-4 h-4"></i>
+                <span>${
+                  project.links.demoType === 'playstore'
+                    ? (currentLang === 'id' ? 'Buka di Google Play Store' : 'Open in Google Play Store')
+                    : project.links.demoType === 'streamlit'
+                    ? (currentLang === 'id' ? 'Buka Dashboard Prediksi Streamlit' : 'Open Live Streamlit Dashboard')
+                    : (currentLang === 'id' ? (project.links.demoLabelId || 'Kunjungi Website Live') : (project.links.demoLabelEn || 'Open Live Demo'))
+                }</span>
               </a>
             `
                 : ''
@@ -846,12 +882,12 @@
         break;
       case 'projects':
         response = `
-          <div class="text-zinc-300">
-            1. <span class="text-rose-400 font-bold">SyncroApp:</span> Project Management Web (React, Go, Mongo, FCM)<br/>
-            2. <span class="text-rose-400 font-bold">Chicken Holic:</span> Mobile Food Ordering App (FlutterFlow, FCM)<br/>
-            3. <span class="text-rose-400 font-bold">Legend Badminton:</span> Court Booking Arena Platform (React)<br/>
-            4. <span class="text-rose-400 font-bold">Sampahku:</span> Digital Waste Bank System (React, Go, Mongo)<br/>
-            5. <span class="text-rose-400 font-bold">Penelitian XGBoost:</span> Sales Demand Forecasting (WAPE 16.36%)
+          <div class="text-zinc-300 space-y-1.5">
+            <div>1. <span class="text-rose-400 font-bold">SyncroApp:</span> <a href="https://syncroapp.github.io/login/" target="_blank" rel="noopener noreferrer" class="text-sky-400 underline hover:text-sky-300">https://syncroapp.github.io/login/</a></div>
+            <div>2. <span class="text-rose-400 font-bold">Chicken Holic:</span> <a href="https://play.google.com/store/apps/details?id=com.chickenholic.app" target="_blank" rel="noopener noreferrer" class="text-emerald-400 underline hover:text-emerald-300">Google Play Store</a></div>
+            <div>3. <span class="text-rose-400 font-bold">Legend Badminton:</span> <a href="https://legendbadminton.com/" target="_blank" rel="noopener noreferrer" class="text-amber-400 underline hover:text-amber-300">https://legendbadminton.com/</a></div>
+            <div>4. <span class="text-rose-400 font-bold">Sampahku:</span> <a href="https://sampahkudev.github.io/landing-page/" target="_blank" rel="noopener noreferrer" class="text-teal-400 underline hover:text-teal-300">https://sampahkudev.github.io/landing-page/</a></div>
+            <div>5. <span class="text-rose-400 font-bold">Penelitian XGBoost:</span> <a href="https://qtskxoh94pb2sybdhca9sr.streamlit.app/" target="_blank" rel="noopener noreferrer" class="text-purple-400 underline hover:text-purple-300">Streamlit Dashboard</a></div>
           </div>
         `;
         break;
