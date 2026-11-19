@@ -1,76 +1,67 @@
 /**
- * Agung Deriko Nainggolan - Portfolio Main Interaction Script
- * Features: Mouse Spotlight, Bilingual Toggle, Filterable Bento Grid,
- * Modals, Interactive CLI Terminal, Toast Notifications, and Scroll Spy.
+ * Agung Deriko Nainggolan — Portfolio Main Interaction Script
  */
 
 (function () {
   'use strict';
 
-  // State Management
+  // State
   let currentLang = localStorage.getItem('agy_portfolio_lang') || 'id';
   let activeProjectFilter = 'all';
   let activeTechFilter = 'all';
 
-  // DOM Elements
-  const mouseSpotlight = document.querySelector('.mouse-spotlight');
-  const projectGrid = document.getElementById('project-grid');
-  const techGrid = document.getElementById('tech-grid');
-  const certGrid = document.getElementById('cert-grid');
+  // DOM
   const modalContainer = document.getElementById('modal-container');
-  const modalContent = document.getElementById('modal-content');
-  const toast = document.getElementById('toast');
-  const toastMessage = document.getElementById('toast-message');
-  const langToggleBtn = document.getElementById('lang-toggle-btn');
+  const modalContent   = document.getElementById('modal-content');
+  const toast          = document.getElementById('toast');
+  const toastMessage   = document.getElementById('toast-message');
+  const langToggleBtn  = document.getElementById('lang-toggle-btn');
   const currentLangLabel = document.getElementById('current-lang-label');
 
-  // --- 1. MOUSE SPOTLIGHT (Aceternity UI Effect) ---
-  function initSpotlight() {
-    window.addEventListener('mousemove', (e) => {
-      document.documentElement.style.setProperty('--mouse-x', `${e.clientX}px`);
-      document.documentElement.style.setProperty('--mouse-y', `${e.clientY}px`);
-    });
-  }
-
-  // --- 2. TOAST NOTIFICATION ---
+  // =====================================================================
+  // TOAST
+  // =====================================================================
   function showToast(message) {
     if (!toast || !toastMessage) return;
     toastMessage.textContent = message;
-    toast.classList.add('show');
+    toast.style.transform = 'translateY(0)';
+    toast.style.opacity   = '1';
     setTimeout(() => {
-      toast.classList.remove('show');
-    }, 3200);
+      toast.style.transform = 'translateY(12px)';
+      toast.style.opacity   = '0';
+    }, 3000);
   }
 
-  // Global helper for copying to clipboard
   window.copyToClipboard = function (text, successMsg) {
     if (navigator.clipboard && window.isSecureContext) {
-      navigator.clipboard.writeText(text).then(() => {
-        showToast(successMsg || (currentLang === 'id' ? 'Disalin ke papan klip!' : 'Copied to clipboard!'));
-      }).catch(() => fallbackCopy(text, successMsg));
+      navigator.clipboard.writeText(text).then(() => showToast(successMsg || 'Disalin!'))
+        .catch(() => fallbackCopy(text, successMsg));
     } else {
       fallbackCopy(text, successMsg);
     }
   };
 
   function fallbackCopy(text, successMsg) {
-    const textArea = document.createElement('textarea');
-    textArea.value = text;
-    textArea.style.position = 'fixed';
-    textArea.style.left = '-999999px';
-    document.body.appendChild(textArea);
-    textArea.focus();
-    textArea.select();
-    try {
-      document.execCommand('copy');
-      showToast(successMsg || (currentLang === 'id' ? 'Disalin ke papan klip!' : 'Copied to clipboard!'));
-    } catch (err) {
-      showToast('Gagal menyalin teks');
-    }
-    document.body.removeChild(textArea);
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;left:-9999px';
+    document.body.appendChild(ta);
+    ta.focus(); ta.select();
+    try { document.execCommand('copy'); showToast(successMsg || 'Disalin!'); }
+    catch { showToast('Gagal menyalin'); }
+    document.body.removeChild(ta);
   }
 
-  // --- 3. DYNAMIC RENDERING ---
+  // =====================================================================
+  // ICONS
+  // =====================================================================
+  function refreshIcons() {
+    if (window.lucide) window.lucide.createIcons();
+  }
+
+  // =====================================================================
+  // RENDER ALL
+  // =====================================================================
   function renderAll() {
     renderHeroStats();
     renderAboutSection();
@@ -83,706 +74,450 @@
     refreshIcons();
   }
 
-  function refreshIcons() {
-    if (window.lucide) {
-      window.lucide.createIcons();
-    }
-  }
-
-  // Render Hero Stats
+  // =====================================================================
+  // HERO STATS
+  // =====================================================================
   function renderHeroStats() {
-    const statsContainer = document.getElementById('hero-stats');
-    if (!statsContainer) return;
-    statsContainer.innerHTML = portfolioData.stats
-      .map(
-        (st) => `
-        <div class="glass-card p-4 rounded-xl border border-white/10 hover:border-rose-500/30 transition flex flex-col justify-center">
-          <div class="flex items-baseline gap-1">
-            <span class="text-2xl lg:text-3xl font-extrabold text-white tracking-tight font-heading">${st.value}</span>
-            <span class="text-xs font-semibold text-rose-400 font-mono">${st.suffix}</span>
-          </div>
-          <p class="text-xs text-zinc-400 mt-1 line-clamp-1">${currentLang === 'id' ? st.labelId : st.labelEn}</p>
+    const container = document.getElementById('hero-stats');
+    if (!container) return;
+    container.innerHTML = portfolioData.stats.map(st => `
+      <div class="stat-card">
+        <div style="display:flex;align-items:baseline;gap:3px">
+          <span class="stat-value">${st.value}</span>
+          <span class="stat-suffix font-mono">${st.suffix}</span>
         </div>
-      `
-      )
-      .join('');
+        <p class="stat-label font-mono">${currentLang === 'id' ? st.labelId : st.labelEn}</p>
+      </div>
+    `).join('');
   }
 
-  // Render About Pillars
+  // =====================================================================
+  // ABOUT
+  // =====================================================================
   function renderAboutSection() {
-    const aboutParas = document.getElementById('about-paragraphs');
-    const aboutPillars = document.getElementById('about-pillars');
-    if (aboutParas) {
+    const parasEl   = document.getElementById('about-paragraphs');
+    const pillarsEl = document.getElementById('about-pillars');
+
+    if (parasEl) {
       const paras = currentLang === 'id' ? portfolioData.about.paragraphsId : portfolioData.about.paragraphsEn;
-      aboutParas.innerHTML = paras.map((p) => `<p class="leading-relaxed text-zinc-300">${p}</p>`).join('');
+      parasEl.innerHTML = paras.map(p => `<p style="color:var(--text-secondary);line-height:1.65;font-size:14px;margin:0">${p}</p>`).join('');
     }
 
-    if (aboutPillars) {
+    if (pillarsEl) {
       const pillars = currentLang === 'id' ? portfolioData.about.pillarsId : portfolioData.about.pillarsEn;
-      aboutPillars.innerHTML = pillars
-        .map(
-          (pil) => `
-          <div class="glass-card p-5 rounded-2xl border border-white/10 hover:border-rose-500/40 transition group">
-            <div class="w-10 h-10 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center justify-center mb-3 group-hover:scale-110 group-hover:bg-rose-500 group-hover:text-white transition duration-300">
-              <i data-lucide="${pil.icon}" class="w-5 h-5"></i>
-            </div>
-            <h4 class="font-bold text-white text-base mb-1.5 font-heading">${pil.title}</h4>
-            <p class="text-xs leading-relaxed text-zinc-400">${pil.desc}</p>
+      pillarsEl.innerHTML = pillars.map(pil => `
+        <div class="card" style="padding:20px;border-radius:12px">
+          <div style="width:32px;height:32px;border-radius:8px;background:var(--bg-raised);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;margin-bottom:12px">
+            <i data-lucide="${pil.icon}" style="width:15px;height:15px;stroke:var(--text-muted)"></i>
           </div>
-        `
-        )
-        .join('');
+          <h4 style="font-size:13px;font-weight:500;color:var(--text-primary);margin:0 0 6px">${pil.title}</h4>
+          <p style="font-size:12px;line-height:1.6;color:var(--text-secondary);margin:0">${pil.desc}</p>
+        </div>
+      `).join('');
     }
   }
 
-  // Render Education
+  // =====================================================================
+  // EDUCATION
+  // =====================================================================
   function renderEducation() {
-    const eduContainer = document.getElementById('education-list');
-    if (!eduContainer) return;
-    eduContainer.innerHTML = portfolioData.education
-      .map(
-        (edu) => `
-        <div class="glass-card p-6 md:p-8 rounded-2xl border border-white/10 hover:border-amber-500/30 transition flex flex-col md:flex-row gap-6 items-start md:items-center">
-          <div class="relative w-24 h-24 md:w-28 md:h-28 rounded-xl overflow-hidden flex-shrink-0 border border-white/15 bg-zinc-900 shadow-md">
-            <img src="${edu.image}" alt="${edu.institution}" class="w-full h-full object-cover object-top hover:scale-105 transition duration-500" />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+    const container = document.getElementById('education-list');
+    if (!container) return;
+    container.innerHTML = portfolioData.education.map(edu => `
+      <div class="card" style="padding:24px;border-radius:12px;display:flex;gap:20px;align-items:flex-start">
+        <div style="width:64px;height:64px;border-radius:10px;overflow:hidden;border:1px solid var(--border);background:var(--bg-deep);flex-shrink:0">
+          <img src="${edu.image}" alt="${edu.institution}" style="width:100%;height:100%;object-fit:cover;object-position:top;display:block" />
+        </div>
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:8px">
+            <span class="font-mono" style="font-size:11px;color:var(--text-muted)">${edu.period}</span>
+            <span class="font-mono" style="font-size:11px;color:var(--accent)">${edu.gpa}</span>
           </div>
-          <div class="flex-1">
-            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
-              <span class="badge-pill text-amber-400 border-amber-500/20 bg-amber-500/10 font-mono">
-                <i data-lucide="calendar" class="w-3 h-3"></i> ${edu.period}
-              </span>
-              <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono">
-                ${edu.gpa}
-              </span>
-            </div>
-            <h3 class="text-lg md:text-xl font-bold text-white font-heading">${edu.institution}</h3>
-            <p class="text-sm font-medium text-rose-400 mt-0.5">${currentLang === 'id' ? edu.degreeId : edu.degreeEn}</p>
-            <p class="text-xs text-zinc-400 mt-2 leading-relaxed">${currentLang === 'id' ? edu.descriptionId : edu.descriptionEn}</p>
-            <div class="flex items-center gap-1.5 text-xs text-zinc-500 mt-3">
-              <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
-              <span>${edu.location}</span>
-            </div>
+          <h3 style="font-size:15px;font-weight:500;color:var(--text-primary);margin:0 0 3px">${edu.institution}</h3>
+          <p style="font-size:13px;color:var(--accent);margin:0 0 8px">${currentLang === 'id' ? edu.degreeId : edu.degreeEn}</p>
+          <p style="font-size:13px;line-height:1.6;color:var(--text-secondary);margin:0 0 8px">${currentLang === 'id' ? edu.descriptionId : edu.descriptionEn}</p>
+          <div class="flex items-center gap-1.5" style="font-size:12px;color:var(--text-muted)">
+            <i data-lucide="map-pin" style="width:12px;height:12px"></i>
+            <span>${edu.location}</span>
           </div>
         </div>
-      `
-      )
-      .join('');
+      </div>
+    `).join('');
   }
 
-  // Render Experience Timeline
+  // =====================================================================
+  // EXPERIENCE TIMELINE
+  // =====================================================================
   function renderExperience() {
-    const expContainer = document.getElementById('experience-timeline');
-    if (!expContainer) return;
-    expContainer.innerHTML = portfolioData.experience
-      .map(
-        (exp, idx) => `
-        <div class="relative pl-8 md:pl-10 border-l border-zinc-800 pb-12 last:pb-2 group">
-          <!-- Timeline Node -->
-          <div class="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-zinc-950 border-2 border-rose-500 group-hover:scale-125 group-hover:bg-rose-500 transition duration-300"></div>
+    const container = document.getElementById('experience-timeline');
+    if (!container) return;
+    container.innerHTML = portfolioData.experience.map((exp, idx) => `
+      <div style="position:relative;padding-left:28px;padding-bottom:${idx < portfolioData.experience.length - 1 ? '40px' : '0'};${idx < portfolioData.experience.length - 1 ? 'border-left:1px solid var(--border)' : ''}">
+        <!-- Node -->
+        <div class="timeline-node" style="position:absolute;left:-5px;top:4px"></div>
 
-          <div class="glass-card p-6 md:p-8 rounded-2xl border border-white/10 hover:border-rose-500/30 transition">
-            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 mb-4">
-              <div>
-                <span class="badge-pill text-xs text-rose-400 border-rose-500/30 bg-rose-500/10 font-mono mb-2">
-                  ${exp.type}
-                </span>
-                <h3 class="text-xl md:text-2xl font-bold text-white font-heading mt-1">
-                  ${currentLang === 'id' ? exp.roleId : exp.roleEn}
-                </h3>
-                <h4 class="text-base font-semibold text-zinc-300 flex items-center gap-2 mt-0.5">
-                  <i data-lucide="building-2" class="w-4 h-4 text-rose-400"></i> ${exp.company}
-                </h4>
-              </div>
-
-              <div class="text-left lg:text-right flex-shrink-0">
-                <span class="inline-flex items-center gap-1.5 text-xs font-mono text-zinc-400 bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
-                  <i data-lucide="calendar" class="w-3.5 h-3.5 text-amber-400"></i> ${exp.period}
-                </span>
-                <p class="text-xs text-zinc-500 mt-1.5 flex items-center lg:justify-end gap-1">
-                  <i data-lucide="map-pin" class="w-3 h-3"></i> ${exp.location}
-                </p>
+        <div class="card card-accent" style="padding:24px;border-radius:12px">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:12px">
+            <div>
+              <span class="font-mono" style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em">${exp.type}</span>
+              <h3 style="font-size:16px;font-weight:500;color:var(--text-primary);margin:4px 0 2px">${currentLang === 'id' ? exp.roleId : exp.roleEn}</h3>
+              <div class="flex items-center gap-2" style="font-size:13px;color:var(--text-secondary)">
+                <i data-lucide="building-2" style="width:13px;height:13px;stroke:var(--text-muted)"></i>
+                <span>${exp.company}</span>
               </div>
             </div>
-
-            <!-- Optional Office/Team Photo Banner -->
-            ${
-              exp.image
-                ? `
-              <div class="mb-5 rounded-xl overflow-hidden border border-white/10 max-h-56 relative group/img">
-                <img src="${exp.image}" alt="${exp.company}" class="w-full h-full object-cover object-center group-hover/img:scale-105 transition duration-500" />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent flex items-end p-3">
-                  <span class="text-xs text-zinc-300 font-mono">Documentation Photo: ${exp.company}</span>
-                </div>
-              </div>
-            `
-                : ''
-            }
-
-            <p class="text-sm text-zinc-300 mb-4 leading-relaxed font-medium">
-              ${currentLang === 'id' ? exp.descriptionId : exp.descriptionEn}
-            </p>
-
-            <ul class="space-y-2.5 mb-6 text-sm text-zinc-400">
-              ${(currentLang === 'id' ? exp.bulletsId : exp.bulletsEn)
-                .map(
-                  (b) => `
-                <li class="flex items-start gap-2.5">
-                  <i data-lucide="check-circle-2" class="w-4 h-4 text-rose-400 flex-shrink-0 mt-0.5"></i>
-                  <span>${b}</span>
-                </li>
-              `
-                )
-                .join('')}
-            </ul>
-
-            <div class="flex flex-wrap gap-2 pt-2 border-t border-white/5">
-              ${exp.techStack
-                .map(
-                  (t) => `
-                <span class="text-xs font-mono px-2.5 py-1 rounded-md bg-white/5 text-zinc-300 border border-white/5">
-                  ${t}
-                </span>
-              `
-                )
-                .join('')}
+            <div style="text-align:right;flex-shrink:0">
+              <span class="font-mono" style="font-size:12px;color:var(--text-muted)">${exp.period}</span>
+              <p style="font-size:12px;color:var(--text-muted);margin:3px 0 0">${exp.location}</p>
             </div>
           </div>
+
+          ${exp.image ? `
+            <div style="margin-bottom:16px;border-radius:10px;overflow:hidden;border:1px solid var(--border);max-height:200px">
+              <img src="${exp.image}" alt="${exp.company}" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block" />
+            </div>
+          ` : ''}
+
+          <p style="font-size:13px;line-height:1.65;color:var(--text-secondary);margin:0 0 12px">${currentLang === 'id' ? exp.descriptionId : exp.descriptionEn}</p>
+
+          <ul style="display:flex;flex-direction:column;gap:6px;margin:0 0 16px;padding:0;list-style:none">
+            ${(currentLang === 'id' ? exp.bulletsId : exp.bulletsEn).map(b => `
+              <li style="display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--text-secondary)">
+                <span class="status-dot" style="margin-top:5px;flex-shrink:0"></span>
+                <span>${b}</span>
+              </li>
+            `).join('')}
+          </ul>
+
+          <div style="display:flex;flex-wrap:wrap;gap:6px;padding-top:16px;border-top:1px solid var(--border)">
+            ${exp.techStack.map(t => `<span class="tech-chip">${t}</span>`).join('')}
+          </div>
         </div>
-      `
-      )
-      .join('');
+      </div>
+    `).join('');
   }
 
-  // Render Tech Stack Matrix
+  // =====================================================================
+  // TECH STACK
+  // =====================================================================
   function renderTechStack(filterCategory = 'all') {
-    if (!techGrid) return;
-    const filteredCategories =
-      filterCategory === 'all'
-        ? portfolioData.techStack
-        : portfolioData.techStack.filter((cat) => cat.category === filterCategory);
+    const container = document.getElementById('tech-grid');
+    if (!container) return;
+    const cats = filterCategory === 'all'
+      ? portfolioData.techStack
+      : portfolioData.techStack.filter(c => c.category === filterCategory);
 
-    techGrid.innerHTML = filteredCategories
-      .map(
-        (category) => `
-        <div class="glass-card p-6 rounded-2xl border border-white/10 hover:border-rose-500/20 transition flex flex-col justify-between">
-          <div>
-            <div class="flex items-center justify-between pb-4 border-b border-white/5 mb-4">
-              <h3 class="text-lg font-bold text-white font-heading flex items-center gap-2">
-                <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
-                ${currentLang === 'id' ? category.categoryNameId : category.categoryNameEn}
-              </h3>
-              <span class="text-xs font-mono text-zinc-400">${category.skills.length} Techs</span>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              ${category.skills
-                .map(
-                  (skill) => `
-                <div class="p-3 rounded-xl bg-white/[0.02] border border-white/5 hover:border-rose-500/30 hover:bg-white/[0.04] transition group/skill">
-                  <div class="flex items-center justify-between mb-1">
-                    <div class="flex items-center gap-2">
-                      <div class="w-6 h-6 rounded-md bg-white/5 flex items-center justify-center text-rose-400 group-hover/skill:text-amber-400 transition">
-                        <i data-lucide="${skill.icon}" class="w-3.5 h-3.5"></i>
-                      </div>
-                      <span class="text-sm font-semibold text-white">${skill.name}</span>
-                    </div>
-                    <span class="text-[10px] font-mono px-2 py-0.5 rounded-full ${
-                      skill.level === 'Advanced' || skill.level === 'Expert'
-                        ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
-                        : 'bg-zinc-800 text-zinc-400 border border-zinc-700'
-                    }">${skill.level}</span>
-                  </div>
-                  <p class="text-[11px] text-zinc-400 leading-snug mt-1 pl-8">${skill.desc}</p>
-                </div>
-              `
-                )
-                .join('')}
-            </div>
-          </div>
+    container.innerHTML = cats.map(cat => `
+      <div class="card" style="padding:24px;border-radius:12px">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:16px;border-bottom:1px solid var(--border);margin-bottom:16px">
+          <h3 style="font-size:14px;font-weight:500;color:var(--text-primary);margin:0;display:flex;align-items:center;gap:8px">
+            <span class="status-dot"></span>
+            ${currentLang === 'id' ? cat.categoryNameId : cat.categoryNameEn}
+          </h3>
+          <span class="font-mono" style="font-size:11px;color:var(--text-muted)">${cat.skills.length} techs</span>
         </div>
-      `
-      )
-      .join('');
+        <div class="grid gap-2" style="grid-template-columns:1fr 1fr">
+          ${cat.skills.map(skill => `
+            <div class="card" style="padding:12px;border-radius:8px">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+                <div style="display:flex;align-items:center;gap:8px">
+                  <i data-lucide="${skill.icon}" style="width:14px;height:14px;stroke:var(--text-muted);flex-shrink:0"></i>
+                  <span style="font-size:13px;font-weight:500;color:var(--text-primary)">${skill.name}</span>
+                </div>
+                <span class="font-mono" style="font-size:10px;color:${skill.level === 'Advanced' || skill.level === 'Expert' ? 'var(--accent)' : 'var(--text-muted)'}">${skill.level}</span>
+              </div>
+              <p style="font-size:11px;line-height:1.5;color:var(--text-muted);margin:0;padding-left:22px">${skill.desc}</p>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `).join('');
     refreshIcons();
   }
 
-  // Render Projects Bento Grid
+  // =====================================================================
+  // PROJECTS
+  // =====================================================================
   function renderProjects(filterCategory = 'all') {
-    if (!projectGrid) return;
-    const filteredProjects =
-      filterCategory === 'all'
-        ? portfolioData.projects
-        : portfolioData.projects.filter((p) => p.category === filterCategory);
+    const container = document.getElementById('project-grid');
+    if (!container) return;
+    const projects = filterCategory === 'all'
+      ? portfolioData.projects
+      : portfolioData.projects.filter(p => p.category === filterCategory);
 
-    projectGrid.innerHTML = filteredProjects
-      .map((proj, idx) => {
-        const isSpecialResearch = proj.id === 'research-xgboost';
-        const isFeatured = proj.featured;
-
-        return `
-        <div class="glass-card rounded-2xl overflow-hidden border border-white/10 hover:border-rose-500/40 transition duration-300 flex flex-col group ${
-          isFeatured ? 'lg:col-span-2' : ''
-        }">
-          <!-- Card Image Thumbnail -->
-          <div class="relative w-full overflow-hidden bg-zinc-950 border-b border-white/10 ${
-            isFeatured ? 'h-64 sm:h-72 md:h-80' : 'h-52 sm:h-60'
-          }">
-            <img 
-              src="${proj.image}" 
-              alt="${proj.title}" 
-              class="w-full h-full object-cover object-top group-hover:scale-105 transition duration-500 cursor-pointer"
-              onclick="window.openProjectModal('${proj.id}')"
-            />
-            <div class="absolute inset-0 bg-gradient-to-t from-zinc-950/90 via-zinc-950/20 to-transparent pointer-events-none"></div>
-
-            <!-- Top Floating Badges -->
-            <div class="absolute top-4 left-4 right-4 flex items-center justify-between gap-2 pointer-events-none">
-              <span class="badge-pill bg-zinc-950/80 backdrop-blur-md text-rose-400 border-rose-500/30 font-mono shadow-lg">
-                ${currentLang === 'id' ? proj.badgeId : proj.badgeEn}
-              </span>
-              <span class="text-[11px] font-mono px-2.5 py-1 rounded-full bg-black/75 backdrop-blur-md text-zinc-300 border border-white/15 uppercase tracking-wider">
-                ${proj.category}
-              </span>
+    container.innerHTML = projects.map((proj, idx) => {
+      const isFeatured = proj.featured;
+      const isResearch = proj.id === 'research-xgboost';
+      return `
+        <div class="card card-accent" style="border-radius:12px;overflow:hidden;display:flex;flex-direction:column;${isFeatured ? 'grid-column:span 2' : ''}">
+          <!-- Image -->
+          <div class="proj-img-wrap" style="${isFeatured ? 'height:280px' : 'height:200px'}">
+            <img src="${proj.image}" alt="${proj.title}" style="cursor:pointer" onclick="openProjectModal('${proj.id}')" />
+            <!-- Category badge -->
+            <div style="position:absolute;top:12px;left:12px;z-index:2">
+              <span class="font-mono" style="font-size:10px;color:var(--text-muted);background:rgba(20,20,21,0.85);padding:3px 8px;border-radius:4px;border:1px solid var(--border)">${currentLang === 'id' ? proj.badgeId : proj.badgeEn}</span>
             </div>
-
-            <!-- Quick Action Hover Pill -->
-            <div class="absolute bottom-4 right-4 z-10">
-              <button 
-                onclick="window.openProjectModal('${proj.id}')"
-                class="px-3.5 py-1.5 rounded-lg bg-rose-600/90 hover:bg-rose-600 text-white text-xs font-semibold shadow-lg backdrop-blur-sm flex items-center gap-1.5 transition transform hover:scale-105"
-              >
-                <span>${currentLang === 'id' ? 'Detail Proyek' : 'View Case Study'}</span>
-                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            <!-- View button -->
+            <div style="position:absolute;bottom:12px;right:12px;z-index:2">
+              <button onclick="openProjectModal('${proj.id}')" class="btn-secondary" style="padding:6px 12px;font-size:12px;gap:6px">
+                <i data-lucide="eye" style="width:13px;height:13px"></i>
+                <span>${currentLang === 'id' ? 'Detail' : 'View'}</span>
               </button>
             </div>
           </div>
 
-          <!-- Card Content Body -->
-          <div class="p-6 md:p-7 flex-1 flex flex-col justify-between">
+          <!-- Body -->
+          <div style="padding:20px 24px;flex:1;display:flex;flex-direction:column;gap:12px">
             <div>
-              <h3 
-                class="text-xl md:text-2xl font-bold text-white font-heading cursor-pointer hover:text-rose-400 transition"
-                onclick="window.openProjectModal('${proj.id}')"
-              >
-                ${proj.title}
-              </h3>
-              <p class="text-sm text-zinc-400 mt-2 leading-relaxed">
-                ${currentLang === 'id' ? proj.taglineId : proj.taglineEn}
-              </p>
-
-              ${
-                isSpecialResearch && proj.researchMetrics
-                  ? `
-                <!-- Special Metric Highlight Box for XGBoost Research -->
-                <div class="mt-4 p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs">
-                  <div class="flex items-center justify-between mb-2">
-                    <span class="font-bold text-amber-300 font-mono flex items-center gap-1">
-                      <i data-lucide="award" class="w-3.5 h-3.5"></i> Hasil Riset Utama (Best Metric)
-                    </span>
-                    <span class="font-extrabold text-amber-400 text-sm font-mono">${proj.researchMetrics.bestMetric}</span>
-                  </div>
-                  <p class="text-zinc-300 text-[11px]">
-                    Item ID terbukti mengungguli One-Hot Encoding pada 4 metrik evaluasi (WAPE, MAE, RMSE, R²). Fitur Lag-1 paling dominan (±34%).
-                  </p>
-                </div>
-              `
-                  : ''
-              }
+              <h3 style="font-size:16px;font-weight:500;color:var(--text-primary);margin:0 0 6px;cursor:pointer" onclick="openProjectModal('${proj.id}')">${proj.title}</h3>
+              <p style="font-size:13px;line-height:1.6;color:var(--text-secondary);margin:0">${currentLang === 'id' ? proj.taglineId : proj.taglineEn}</p>
             </div>
 
-            <!-- Card Footer Tech Stack & Links -->
-            <div class="mt-6 pt-4 border-t border-white/5 flex flex-wrap items-center justify-between gap-3">
-              <div class="flex flex-wrap gap-1.5">
-                ${proj.techStack
-                  .slice(0, 4)
-                  .map(
-                    (tech) => `
-                  <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-white/5 text-zinc-300 border border-white/5">
-                    ${tech}
-                  </span>
-                `
-                  )
-                  .join('')}
-                ${
-                  proj.techStack.length > 4
-                    ? `<span class="text-[10px] font-mono px-1.5 py-0.5 text-zinc-500">+${proj.techStack.length - 4}</span>`
-                    : ''
-                }
+            ${isResearch && proj.researchMetrics ? `
+              <div style="padding:12px;border-radius:8px;background:var(--bg-raised);border:1px solid var(--border)">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+                  <span class="font-mono" style="font-size:11px;color:var(--text-muted)">Hasil riset terbaik</span>
+                  <span class="font-mono" style="font-size:13px;font-weight:500;color:var(--accent)">${proj.researchMetrics.bestMetric}</span>
+                </div>
+                <p style="font-size:11px;color:var(--text-muted);margin:0;line-height:1.5">Category Item ID mengungguli One-Hot Encoding pada 4 metrik (WAPE, MAE, RMSE, R²). Lag-1 dominan ±34%.</p>
               </div>
+            ` : ''}
 
-              <div class="flex items-center gap-2">
-                ${
-                  proj.links.demo
-                    ? `
-                  <a 
-                    href="${proj.links.demo}" 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    class="text-xs font-semibold px-2.5 py-1 rounded ${
-                      proj.links.demoType === 'playstore'
-                        ? 'bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
-                        : proj.links.demoType === 'streamlit'
-                        ? 'bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30'
-                        : 'bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30'
-                    } flex items-center gap-1.5 transition transform hover:scale-105"
-                  >
-                    <i data-lucide="${
-                      proj.links.demoType === 'playstore'
-                        ? 'smartphone'
-                        : proj.links.demoType === 'streamlit'
-                        ? 'activity'
-                        : 'external-link'
-                    }" class="w-3 h-3"></i>
-                    <span>${
-                      proj.links.demoType === 'playstore'
-                        ? 'Play Store'
-                        : proj.links.demoType === 'streamlit'
-                        ? 'Streamlit App'
-                        : (currentLang === 'id' ? 'Live Demo' : 'Live Web')
-                    }</span>
+            <!-- Footer -->
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:12px;border-top:1px solid var(--border);margin-top:auto">
+              <div style="display:flex;flex-wrap:wrap;gap:4px">
+                ${proj.techStack.slice(0, 4).map(t => `<span class="tech-chip">${t}</span>`).join('')}
+                ${proj.techStack.length > 4 ? `<span class="font-mono" style="font-size:10px;color:var(--text-muted);padding:3px 4px">+${proj.techStack.length - 4}</span>` : ''}
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+                ${proj.links.demo ? `
+                  <a href="${proj.links.demo}" target="_blank" rel="noopener noreferrer" class="btn-secondary" style="padding:5px 10px;font-size:11px;gap:5px;text-decoration:none">
+                    <i data-lucide="${proj.links.demoType === 'playstore' ? 'smartphone' : proj.links.demoType === 'streamlit' ? 'activity' : 'external-link'}" style="width:12px;height:12px"></i>
+                    <span>${proj.links.demoType === 'playstore' ? 'Play Store' : proj.links.demoType === 'streamlit' ? 'Streamlit' : 'Demo'}</span>
                   </a>
-                `
-                    : ''
-                }
-                <button 
-                  onclick="window.openProjectModal('${proj.id}')"
-                  class="text-xs font-semibold px-2.5 py-1 rounded bg-white/5 hover:bg-white/10 text-zinc-300 border border-white/10 flex items-center gap-1 transition"
-                >
-                  <i data-lucide="eye" class="w-3 h-3"></i>
-                  <span>Inspect</span>
-                </button>
+                ` : ''}
               </div>
             </div>
           </div>
         </div>
       `;
-      })
-      .join('');
+    }).join('');
     refreshIcons();
   }
 
-  // Render Certificates Gallery
+  // =====================================================================
+  // CERTIFICATES
+  // =====================================================================
   function renderCertificates() {
-    if (!certGrid) return;
-    certGrid.innerHTML = portfolioData.certificates
-      .map(
-        (cert) => `
-        <div 
-          class="glass-card rounded-2xl overflow-hidden border border-white/10 hover:border-amber-500/40 transition duration-300 flex flex-col cursor-pointer group"
-          onclick="window.openCertificateModal('${cert.id}')"
-        >
-          <div class="relative w-full h-44 bg-zinc-900 overflow-hidden border-b border-white/10">
-            <img 
-              src="${cert.image}" 
-              alt="${cert.title}" 
-              class="w-full h-full object-cover object-center group-hover:scale-105 transition duration-500" 
-            />
-            <div class="absolute inset-0 bg-black/30 group-hover:bg-transparent transition duration-300"></div>
-            <div class="absolute top-3 left-3">
-              <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-black/80 backdrop-blur-md text-amber-400 border border-amber-500/30">
-                ${cert.type}
-              </span>
-            </div>
-            <div class="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition duration-200">
-              <span class="text-xs bg-zinc-950/90 text-white px-2 py-1 rounded-md border border-white/20 flex items-center gap-1 shadow">
-                <i data-lucide="zoom-in" class="w-3 h-3"></i> Perbesar
-              </span>
-            </div>
-          </div>
-          <div class="p-4 flex-1 flex flex-col justify-between">
-            <div>
-              <h4 class="text-base font-bold text-white font-heading group-hover:text-amber-400 transition line-clamp-1">
-                ${cert.title}
-              </h4>
-              <p class="text-xs font-semibold text-rose-400 mt-1">${cert.issuer}</p>
-              <p class="text-[11px] text-zinc-400 mt-1.5 line-clamp-2">
-                ${currentLang === 'id' ? cert.descriptionId : cert.descriptionEn}
-              </p>
-            </div>
-            <div class="mt-3 pt-2 border-t border-white/5 flex items-center justify-between text-[11px] text-zinc-500 font-mono">
-              <span>${cert.date}</span>
-              <span class="text-amber-400/80 flex items-center gap-0.5">
-                <i data-lucide="shield-check" class="w-3 h-3"></i> Verified
-              </span>
-            </div>
+    const container = document.getElementById('cert-grid');
+    if (!container) return;
+    container.innerHTML = portfolioData.certificates.map(cert => `
+      <div class="card card-accent" style="border-radius:12px;overflow:hidden;cursor:pointer;display:flex;flex-direction:column" onclick="openCertificateModal('${cert.id}')">
+        <div style="height:160px;overflow:hidden;background:var(--bg-deep);position:relative">
+          <img src="${cert.image}" alt="${cert.title}" class="cert-img" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block" />
+          <!-- Type badge -->
+          <div style="position:absolute;top:10px;left:10px">
+            <span class="font-mono" style="font-size:10px;color:var(--text-muted);background:rgba(15,15,16,0.88);padding:3px 7px;border-radius:4px;border:1px solid var(--border)">${cert.type}</span>
           </div>
         </div>
-      `
-      )
-      .join('');
+        <div style="padding:16px;flex:1;display:flex;flex-direction:column;gap:4px">
+          <h4 style="font-size:13px;font-weight:500;color:var(--text-primary);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${cert.title}</h4>
+          <p style="font-size:12px;color:var(--accent);margin:0">${cert.issuer}</p>
+          <p style="font-size:11px;line-height:1.5;color:var(--text-secondary);margin:4px 0 0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${currentLang === 'id' ? cert.descriptionId : cert.descriptionEn}</p>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--border);margin-top:auto">
+            <span class="font-mono" style="font-size:11px;color:var(--text-muted)">${cert.date}</span>
+            <span class="flex items-center gap-1 font-mono" style="font-size:11px;color:var(--text-muted)">
+              <i data-lucide="shield-check" style="width:12px;height:12px;stroke:var(--text-muted)"></i> Verified
+            </span>
+          </div>
+        </div>
+      </div>
+    `).join('');
     refreshIcons();
   }
 
-  // --- 4. MODALS & LIGHTBOX ---
+  // =====================================================================
+  // MODALS
+  // =====================================================================
   window.openProjectModal = function (projectId) {
-    const project = portfolioData.projects.find((p) => p.id === projectId);
+    const project = portfolioData.projects.find(p => p.id === projectId);
     if (!project || !modalContainer || !modalContent) return;
-
     const isResearch = project.id === 'research-xgboost';
 
     modalContent.innerHTML = `
-      <div class="p-6 md:p-8">
-        <!-- Modal Header -->
-        <div class="flex items-start justify-between gap-4 pb-4 border-b border-white/10">
+      <div style="padding:28px">
+        <!-- Header -->
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding-bottom:20px;border-bottom:1px solid var(--border)">
           <div>
-            <span class="badge-pill text-rose-400 border-rose-500/30 bg-rose-500/10 font-mono text-xs mb-2">
-              ${currentLang === 'id' ? project.badgeId : project.badgeEn}
-            </span>
-            <h2 class="text-2xl md:text-3xl font-extrabold text-white font-heading mt-1">${project.title}</h2>
-            <p class="text-sm text-zinc-400 mt-1">${currentLang === 'id' ? project.taglineId : project.taglineEn}</p>
+            <span class="font-mono" style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em">${currentLang === 'id' ? project.badgeId : project.badgeEn}</span>
+            <h2 style="font-size:20px;font-weight:500;color:var(--text-primary);margin:6px 0 4px">${project.title}</h2>
+            <p style="font-size:13px;color:var(--text-secondary);margin:0">${currentLang === 'id' ? project.taglineId : project.taglineEn}</p>
           </div>
-          <button 
-            onclick="window.closeModal()" 
-            class="w-9 h-9 rounded-full bg-white/5 hover:bg-white/15 text-zinc-300 flex items-center justify-center transition flex-shrink-0"
-            aria-label="Close modal"
-          >
-            <i data-lucide="x" class="w-5 h-5"></i>
+          <button onclick="closeModal()" class="btn-icon" style="flex-shrink:0" aria-label="Tutup">
+            <i data-lucide="x" style="width:16px;height:16px"></i>
           </button>
         </div>
 
-        <!-- High-res Image Showcase -->
-        <div class="my-6 rounded-2xl overflow-hidden border border-white/15 bg-black/60 shadow-2xl max-h-[460px] flex items-center justify-center">
-          <img src="${project.image}" alt="${project.title}" class="w-full h-auto max-h-[460px] object-contain" />
+        <!-- Image -->
+        <div style="margin:20px 0;border-radius:10px;overflow:hidden;border:1px solid var(--border);background:var(--bg-deep);display:flex;align-items:center;justify-content:center;max-height:400px">
+          <img src="${project.image}" alt="${project.title}" style="width:100%;height:auto;max-height:400px;object-fit:contain;display:block" />
         </div>
 
-        <!-- Project Overview -->
-        <div class="space-y-6 text-zinc-300 text-sm leading-relaxed">
+        <!-- Content -->
+        <div style="display:flex;flex-direction:column;gap:20px">
           <div>
-            <h4 class="text-base font-bold text-white font-heading mb-2 flex items-center gap-2">
-              <i data-lucide="info" class="w-4 h-4 text-rose-400"></i> ${currentLang === 'id' ? 'Gambaran Proyek' : 'Project Overview'}
+            <h4 style="font-size:13px;font-weight:500;color:var(--text-primary);margin:0 0 8px;display:flex;align-items:center;gap:6px">
+              <i data-lucide="info" style="width:13px;height:13px;stroke:var(--text-muted)"></i>
+              ${currentLang === 'id' ? 'Gambaran proyek' : 'Project overview'}
             </h4>
-            <p class="text-zinc-300">${currentLang === 'id' ? project.overviewId : project.overviewEn}</p>
+            <p style="font-size:13px;line-height:1.65;color:var(--text-secondary);margin:0">${currentLang === 'id' ? project.overviewId : project.overviewEn}</p>
           </div>
 
-          <!-- Key Features -->
           <div>
-            <h4 class="text-base font-bold text-white font-heading mb-3 flex items-center gap-2">
-              <i data-lucide="sparkles" class="w-4 h-4 text-amber-400"></i> ${currentLang === 'id' ? 'Fitur Kunci & Implementasi' : 'Key Features & Implementation'}
+            <h4 style="font-size:13px;font-weight:500;color:var(--text-primary);margin:0 0 10px;display:flex;align-items:center;gap:6px">
+              <i data-lucide="list" style="width:13px;height:13px;stroke:var(--text-muted)"></i>
+              ${currentLang === 'id' ? 'Fitur & implementasi' : 'Features & implementation'}
             </h4>
-            <ul class="space-y-2.5">
-              ${(currentLang === 'id' ? project.featuresId : project.featuresEn)
-                .map(
-                  (f) => `
-                <li class="flex items-start gap-2.5">
-                  <i data-lucide="check" class="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5"></i>
+            <ul style="display:flex;flex-direction:column;gap:6px;margin:0;padding:0;list-style:none">
+              ${(currentLang === 'id' ? project.featuresId : project.featuresEn).map(f => `
+                <li style="display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--text-secondary)">
+                  <span class="status-dot" style="margin-top:5px;flex-shrink:0"></span>
                   <span>${f}</span>
                 </li>
-              `
-                )
-                .join('')}
+              `).join('')}
             </ul>
           </div>
 
-          <!-- If XGBoost Research: Display Full Benchmark Table -->
-          ${
-            isResearch && project.researchMetrics
-              ? `
-            <div class="mt-6 p-5 rounded-2xl bg-zinc-900/90 border border-amber-500/30">
-              <h4 class="text-base font-bold text-amber-400 font-heading mb-3 flex items-center gap-2">
-                <i data-lucide="table" class="w-4 h-4"></i> Hasil Perbandingan Metrik: One-Hot vs Category Item ID
-              </h4>
-              <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs font-mono border-collapse">
+          ${isResearch && project.researchMetrics ? `
+            <div style="padding:20px;border-radius:10px;background:var(--bg-raised);border:1px solid rgba(245,158,11,0.2)">
+              <h4 style="font-size:13px;font-weight:500;color:var(--text-primary);margin:0 0 12px">Perbandingan metrik: One-Hot vs Category Item ID</h4>
+              <div style="overflow-x:auto">
+                <table style="width:100%;border-collapse:collapse;font-size:12px;font-family:'Geist Mono',monospace">
                   <thead>
-                    <tr class="border-b border-white/10 text-zinc-400">
-                      <th class="py-2.5 px-3">Metrik Evaluasi</th>
-                      <th class="py-2.5 px-3">One-Hot Encoding</th>
-                      <th class="py-2.5 px-3 text-emerald-400 font-bold">Category Item ID (Skripsi)</th>
-                      <th class="py-2.5 px-3 text-rose-400">Kesimpulan</th>
+                    <tr style="border-bottom:1px solid var(--border)">
+                      <th style="padding:8px 12px;text-align:left;color:var(--text-muted);font-weight:400">Metrik</th>
+                      <th style="padding:8px 12px;text-align:left;color:var(--text-muted);font-weight:400">One-Hot Encoding</th>
+                      <th style="padding:8px 12px;text-align:left;color:var(--accent);font-weight:500">Category Item ID</th>
+                      <th style="padding:8px 12px;text-align:left;color:var(--text-muted);font-weight:400">Kesimpulan</th>
                     </tr>
                   </thead>
-                  <tbody class="divide-y divide-white/5 text-zinc-300">
-                    ${project.researchMetrics.table
-                      .map(
-                        (row) => `
-                      <tr class="hover:bg-white/[0.02]">
-                        <td class="py-2.5 px-3 font-semibold text-white">${row.metric}</td>
-                        <td class="py-2.5 px-3 text-zinc-400">${row.oneHot}</td>
-                        <td class="py-2.5 px-3 text-emerald-300 font-bold bg-emerald-500/5">${row.itemId}</td>
-                        <td class="py-2.5 px-3 text-amber-300">Lebih Akurat & Cepat</td>
+                  <tbody>
+                    ${project.researchMetrics.table.map(row => `
+                      <tr style="border-bottom:1px solid var(--border)">
+                        <td style="padding:8px 12px;color:var(--text-primary)">${row.metric}</td>
+                        <td style="padding:8px 12px;color:var(--text-secondary)">${row.oneHot}</td>
+                        <td style="padding:8px 12px;color:var(--accent);font-weight:500">${row.itemId}</td>
+                        <td style="padding:8px 12px;color:var(--text-muted)">Lebih akurat</td>
                       </tr>
-                    `
-                      )
-                      .join('')}
+                    `).join('')}
                   </tbody>
                 </table>
               </div>
-              <p class="text-[11px] text-zinc-400 mt-3 italic">
-                *Analisis feature importance menunjukkan fitur penjualan minggu lalu (Lag-1) memberikan pengaruh dominan sebesar ±34%.
-              </p>
+              <p style="font-size:11px;color:var(--text-muted);margin:10px 0 0;font-style:italic">*Fitur Lag-1 (penjualan minggu lalu) memberikan pengaruh dominan ±34%.</p>
             </div>
-          `
-              : ''
-          }
+          ` : ''}
 
-          <!-- Tech Stack Tags -->
           <div>
-            <h4 class="text-base font-bold text-white font-heading mb-2.5 flex items-center gap-2">
-              <i data-lucide="code" class="w-4 h-4 text-cyan-400"></i> Tech Stack & Tools
+            <h4 style="font-size:13px;font-weight:500;color:var(--text-primary);margin:0 0 10px;display:flex;align-items:center;gap:6px">
+              <i data-lucide="code" style="width:13px;height:13px;stroke:var(--text-muted)"></i> Tech stack
             </h4>
-            <div class="flex flex-wrap gap-2">
-              ${project.techStack
-                .map(
-                  (t) => `
-                <span class="text-xs font-mono px-3 py-1 rounded-lg bg-white/5 text-zinc-200 border border-white/10">
-                  ${t}
-                </span>
-              `
-                )
-                .join('')}
+            <div style="display:flex;flex-wrap:wrap;gap:6px">
+              ${project.techStack.map(t => `<span class="tech-chip">${t}</span>`).join('')}
             </div>
           </div>
         </div>
 
-        <!-- Modal Actions Footer -->
-        <div class="mt-8 pt-5 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
-          <div class="flex items-center gap-3">
-            ${
-              project.links.demo
-                ? `
-              <a 
-                href="${project.links.demo}" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                class="px-5 py-2.5 rounded-xl ${
-                  project.links.demoType === 'playstore'
-                    ? 'bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-600 text-white'
-                    : project.links.demoType === 'streamlit'
-                    ? 'bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-500 text-zinc-950 font-bold'
-                    : 'bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-600 text-white font-semibold'
-                } text-xs tracking-wide shadow-lg flex items-center gap-2 transition transform hover:scale-105"
-              >
-                <i data-lucide="${
-                  project.links.demoType === 'playstore'
-                    ? 'smartphone'
-                    : project.links.demoType === 'streamlit'
-                    ? 'activity'
-                    : 'external-link'
-                }" class="w-4 h-4"></i>
-                <span>${
-                  project.links.demoType === 'playstore'
-                    ? (currentLang === 'id' ? 'Buka di Google Play Store' : 'Open in Google Play Store')
-                    : project.links.demoType === 'streamlit'
-                    ? (currentLang === 'id' ? 'Buka Dashboard Prediksi Streamlit' : 'Open Live Streamlit Dashboard')
-                    : (currentLang === 'id' ? (project.links.demoLabelId || 'Kunjungi Website Live') : (project.links.demoLabelEn || 'Open Live Demo'))
-                }</span>
+        <!-- Footer -->
+        <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+          <div style="display:flex;align-items:center;gap:8px">
+            ${project.links.demo ? `
+              <a href="${project.links.demo}" target="_blank" rel="noopener noreferrer" class="btn-primary" style="font-size:12px;padding:8px 16px;gap:6px;text-decoration:none">
+                <i data-lucide="${project.links.demoType === 'playstore' ? 'smartphone' : project.links.demoType === 'streamlit' ? 'activity' : 'external-link'}" style="width:13px;height:13px"></i>
+                <span>${project.links.demoType === 'playstore' ? 'Google Play Store' : project.links.demoType === 'streamlit' ? 'Streamlit Dashboard' : (currentLang === 'id' ? 'Kunjungi website' : 'Open demo')}</span>
               </a>
-            `
-                : ''
-            }
-            <a 
-              href="${project.links.github}" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              class="px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-xs tracking-wide border border-white/15 flex items-center gap-2 transition"
-            >
-              <i data-lucide="github" class="w-4 h-4"></i>
-              <span>GitHub Profile</span>
+            ` : ''}
+            <a href="${project.links.github}" target="_blank" rel="noopener noreferrer" class="btn-secondary" style="font-size:12px;padding:8px 16px;gap:6px;text-decoration:none">
+              <i data-lucide="github" style="width:13px;height:13px"></i> GitHub
             </a>
           </div>
-
-          <button 
-            onclick="window.closeModal()" 
-            class="text-xs font-mono text-zinc-400 hover:text-white transition"
-          >
+          <button onclick="closeModal()" class="font-mono" style="font-size:12px;color:var(--text-muted);background:none;border:none;cursor:pointer">
             ${currentLang === 'id' ? 'Tutup [Esc]' : 'Close [Esc]'}
           </button>
         </div>
       </div>
     `;
 
-    modalContainer.classList.remove('hidden');
+    modalContainer.style.display = 'flex';
     document.body.style.overflow = 'hidden';
     refreshIcons();
   };
 
   window.openCertificateModal = function (certId) {
-    const cert = portfolioData.certificates.find((c) => c.id === certId);
+    const cert = portfolioData.certificates.find(c => c.id === certId);
     if (!cert || !modalContainer || !modalContent) return;
 
     modalContent.innerHTML = `
-      <div class="p-6 md:p-8">
-        <div class="flex items-center justify-between pb-4 border-b border-white/10 mb-4">
+      <div style="padding:28px">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding-bottom:16px;border-bottom:1px solid var(--border)">
           <div>
-            <span class="badge-pill text-amber-400 border-amber-500/30 bg-amber-500/10 font-mono text-xs mb-1">
-              ${cert.type}
-            </span>
-            <h3 class="text-xl md:text-2xl font-bold text-white font-heading mt-1">${cert.title}</h3>
-            <p class="text-xs font-semibold text-rose-400">${cert.issuer} • ${cert.date}</p>
+            <span class="font-mono" style="font-size:11px;color:var(--text-muted)">${cert.type}</span>
+            <h3 style="font-size:18px;font-weight:500;color:var(--text-primary);margin:6px 0 2px">${cert.title}</h3>
+            <p style="font-size:12px;color:var(--accent);margin:0">${cert.issuer} · ${cert.date}</p>
           </div>
-          <button 
-            onclick="window.closeModal()" 
-            class="w-9 h-9 rounded-full bg-white/5 hover:bg-white/15 text-zinc-300 flex items-center justify-center transition"
-          >
-            <i data-lucide="x" class="w-5 h-5"></i>
+          <button onclick="closeModal()" class="btn-icon" aria-label="Tutup">
+            <i data-lucide="x" style="width:16px;height:16px"></i>
           </button>
         </div>
 
-        <div class="rounded-xl overflow-hidden border border-white/15 bg-black/80 my-4 shadow-2xl flex items-center justify-center">
-          <img src="${cert.image}" alt="${cert.title}" class="w-full h-auto max-h-[500px] object-contain" />
+        <div style="margin:20px 0;border-radius:10px;overflow:hidden;border:1px solid var(--border);background:var(--bg-deep);display:flex;align-items:center;justify-content:center">
+          <img src="${cert.image}" alt="${cert.title}" style="width:100%;height:auto;max-height:500px;object-fit:contain;display:block" />
         </div>
 
-        <p class="text-sm text-zinc-300 leading-relaxed mt-4">
-          ${currentLang === 'id' ? cert.descriptionId : cert.descriptionEn}
-        </p>
+        <p style="font-size:13px;line-height:1.65;color:var(--text-secondary);margin:0 0 20px">${currentLang === 'id' ? cert.descriptionId : cert.descriptionEn}</p>
 
-        <div class="mt-6 pt-4 border-t border-white/10 flex items-center justify-between">
-          <span class="text-xs font-mono text-emerald-400 flex items-center gap-1.5">
-            <i data-lucide="check-circle" class="w-4 h-4"></i> Authentic & Verified Credential
+        <div style="display:flex;align-items:center;justify-content:space-between;padding-top:16px;border-top:1px solid var(--border)">
+          <span class="flex items-center gap-2 font-mono" style="font-size:12px;color:var(--text-muted)">
+            <i data-lucide="shield-check" style="width:14px;height:14px;stroke:var(--text-muted)"></i> Authentic & Verified
           </span>
-          <button 
-            onclick="window.closeModal()" 
-            class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-semibold transition"
-          >
-            Tutup
-          </button>
+          <button onclick="closeModal()" class="btn-secondary" style="font-size:12px;padding:7px 14px">Tutup</button>
         </div>
       </div>
     `;
 
-    modalContainer.classList.remove('hidden');
+    modalContainer.style.display = 'flex';
     document.body.style.overflow = 'hidden';
     refreshIcons();
   };
 
   window.closeModal = function () {
     if (!modalContainer) return;
-    modalContainer.classList.add('hidden');
+    modalContainer.style.display = 'none';
     document.body.style.overflow = '';
   };
 
-  // Close modal on background click
+  // Close on backdrop click
   if (modalContainer) {
-    modalContainer.addEventListener('click', (e) => {
-      if (e.target === modalContainer) {
-        window.closeModal();
-      }
+    modalContainer.addEventListener('click', e => {
+      if (e.target === modalContainer) closeModal();
     });
   }
 
-  // Keyboard shortcut Esc to close
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      window.closeModal();
-    }
+  // Esc to close
+  window.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModal();
   });
 
-  // --- 5. BILINGUAL LANGUAGE SWITCHER ---
+  // =====================================================================
+  // LANGUAGE SWITCHER
+  // =====================================================================
   function updateTextTranslations() {
-    document.querySelectorAll('[data-i18n-id]').forEach((el) => {
-      const idText = el.getAttribute('data-i18n-id');
-      const enText = el.getAttribute('data-i18n-en');
-      if (currentLang === 'id' && idText) {
-        el.textContent = idText;
-      } else if (currentLang === 'en' && enText) {
-        el.textContent = enText;
-      }
+    document.querySelectorAll('[data-i18n-id]').forEach(el => {
+      const id = el.getAttribute('data-i18n-id');
+      const en = el.getAttribute('data-i18n-en');
+      if (currentLang === 'id' && id) el.textContent = id;
+      else if (currentLang === 'en' && en) el.textContent = en;
     });
-
-    if (currentLangLabel) {
-      currentLangLabel.textContent = currentLang.toUpperCase();
-    }
+    if (currentLangLabel) currentLangLabel.textContent = currentLang.toUpperCase();
   }
 
   function toggleLanguage() {
@@ -792,48 +527,51 @@
     showToast(currentLang === 'id' ? 'Bahasa diubah ke Bahasa Indonesia' : 'Language switched to English');
   }
 
-  if (langToggleBtn) {
-    langToggleBtn.addEventListener('click', toggleLanguage);
-  }
+  if (langToggleBtn) langToggleBtn.addEventListener('click', toggleLanguage);
 
-  // --- 6. FILTER BUTTONS HANDLING ---
+  // =====================================================================
+  // FILTER BUTTONS
+  // =====================================================================
   function initFilterButtons() {
-    // Project filter tabs
-    document.querySelectorAll('.project-filter-btn').forEach((btn) => {
+    document.querySelectorAll('.project-filter-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        document.querySelectorAll('.project-filter-btn').forEach((b) => {
-          b.classList.remove('active', 'bg-rose-500', 'text-white');
-          b.classList.add('bg-white/5', 'text-zinc-400');
-        });
-        btn.classList.add('active', 'bg-rose-500', 'text-white');
-        btn.classList.remove('bg-white/5', 'text-zinc-400');
+        document.querySelectorAll('.project-filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
         activeProjectFilter = btn.getAttribute('data-filter') || 'all';
         renderProjects(activeProjectFilter);
       });
     });
 
-    // Tech stack filter tabs
-    document.querySelectorAll('.tech-filter-btn').forEach((btn) => {
+    document.querySelectorAll('.tech-filter-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        document.querySelectorAll('.tech-filter-btn').forEach((b) => {
-          b.classList.remove('active', 'bg-rose-500', 'text-white');
-          b.classList.add('bg-white/5', 'text-zinc-400');
-        });
-        btn.classList.add('active', 'bg-rose-500', 'text-white');
-        btn.classList.remove('bg-white/5', 'text-zinc-400');
+        document.querySelectorAll('.tech-filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
         activeTechFilter = btn.getAttribute('data-filter') || 'all';
         renderTechStack(activeTechFilter);
       });
     });
   }
 
-  // --- 7. INTERACTIVE TERMINAL EASTER EGG ---
-  function initTerminal() {
+  // =====================================================================
+  // TERMINAL EASTER EGG
+  // =====================================================================
+
+  // Exposed for inline onclick buttons
+  window.runTerminalCmd = function(cmd) {
     const input = document.getElementById('terminal-input');
+    if (input) {
+      input.value = cmd;
+      executeTerminalCommand(cmd, document.getElementById('terminal-output'));
+      input.value = '';
+    }
+  };
+
+  function initTerminal() {
+    const input  = document.getElementById('terminal-input');
     const output = document.getElementById('terminal-output');
     if (!input || !output) return;
 
-    input.addEventListener('keydown', (e) => {
+    input.addEventListener('keydown', e => {
       if (e.key === 'Enter') {
         const val = input.value.trim().toLowerCase();
         input.value = '';
@@ -843,97 +581,83 @@
   }
 
   function executeTerminalCommand(cmd, output) {
-    const row = document.createElement('div');
-    row.className = 'mt-2';
+    if (cmd === 'clear') { output.innerHTML = ''; return; }
+    if (!cmd) return;
 
     let response = '';
     switch (cmd) {
       case 'help':
-        response = `
-          <div class="text-zinc-300">
-            <span class="text-amber-400 font-bold">Available Commands:</span><br/>
-            • <span class="text-rose-400">about</span>    : Ringkasan profil Agung Deriko Nainggolan<br/>
-            • <span class="text-rose-400">skills</span>   : Daftar keahlian frontend & mobile<br/>
-            • <span class="text-rose-400">projects</span> : Daftar portofolio aplikasi & riset<br/>
-            • <span class="text-rose-400">stats</span>    : IPK, capaian riset XGBoost & pengalaman<br/>
-            • <span class="text-rose-400">contact</span>  : Email, nomor WhatsApp, GitHub, LinkedIn<br/>
-            • <span class="text-rose-400">clear</span>    : Bersihkan layar terminal
-          </div>
-        `;
+        response = `<span style="color:var(--text-secondary)">
+          Perintah tersedia:<br/>
+          &nbsp;· <span style="color:var(--accent)">about</span>    — profil singkat<br/>
+          &nbsp;· <span style="color:var(--accent)">skills</span>   — keahlian & stack<br/>
+          &nbsp;· <span style="color:var(--accent)">projects</span> — daftar proyek<br/>
+          &nbsp;· <span style="color:var(--accent)">stats</span>    — capaian & statistik<br/>
+          &nbsp;· <span style="color:var(--accent)">contact</span>  — kontak & profil<br/>
+          &nbsp;· <span style="color:var(--accent)">clear</span>    — bersihkan terminal
+        </span>`;
         break;
       case 'about':
-        response = `
-          <div class="text-zinc-300">
-            <span class="text-emerald-400 font-bold">Agung Deriko Nainggolan</span><br/>
-            Lulusan D4 Teknik Informatika Universitas Logistik dan Bisnis Internasional (ULBI), IPK 3.67/4.00.<br/>
-            Spesialisasi Frontend (React, JS, Tailwind) & Mobile (Flutter, FlutterFlow).
-          </div>
-        `;
+        response = `<span style="color:var(--text-secondary)">
+          <span style="color:var(--text-primary);font-weight:500">Agung Deriko Nainggolan</span><br/>
+          Lulusan D4 Teknik Informatika ULBI, IPK 3.67/4.00.<br/>
+          Spesialisasi Frontend (React, Tailwind) & Mobile (Flutter, FlutterFlow).
+        </span>`;
         break;
       case 'skills':
-        response = `
-          <div class="text-zinc-300">
-            • <span class="text-cyan-400">Frontend:</span> React JS, JavaScript (ES6+), Tailwind CSS, Bootstrap, HTML5/CSS3<br/>
-            • <span class="text-cyan-400">Mobile:</span> Flutter, Dart, FlutterFlow, Android Studio<br/>
-            • <span class="text-cyan-400">Backend & DB:</span> Go (Golang), PHP, MySQL, PostgreSQL, MongoDB<br/>
-            • <span class="text-cyan-400">Workflow & ML:</span> Git, Postman, Firebase (FCM), XGBoost, Streamlit
-          </div>
-        `;
+        response = `<span style="color:var(--text-secondary)">
+          · <span style="color:var(--text-muted)">Frontend:</span> React JS, JavaScript (ES6+), Tailwind CSS, HTML/CSS<br/>
+          · <span style="color:var(--text-muted)">Mobile:</span> Flutter, Dart, FlutterFlow, Android Studio<br/>
+          · <span style="color:var(--text-muted)">Backend & DB:</span> Go, PHP, MySQL, PostgreSQL, MongoDB<br/>
+          · <span style="color:var(--text-muted)">Tools & ML:</span> Git, Postman, Firebase, XGBoost, Streamlit
+        </span>`;
         break;
       case 'projects':
-        response = `
-          <div class="text-zinc-300 space-y-1.5">
-            <div>1. <span class="text-rose-400 font-bold">SyncroApp:</span> <a href="https://syncroapp.github.io/login/" target="_blank" rel="noopener noreferrer" class="text-sky-400 underline hover:text-sky-300">https://syncroapp.github.io/login/</a></div>
-            <div>2. <span class="text-rose-400 font-bold">Chicken Holic:</span> <a href="https://play.google.com/store/apps/details?id=com.chickenholic.app" target="_blank" rel="noopener noreferrer" class="text-emerald-400 underline hover:text-emerald-300">Google Play Store</a></div>
-            <div>3. <span class="text-rose-400 font-bold">Legend Badminton:</span> <a href="https://legendbadminton.com/" target="_blank" rel="noopener noreferrer" class="text-amber-400 underline hover:text-amber-300">https://legendbadminton.com/</a></div>
-            <div>4. <span class="text-rose-400 font-bold">Sampahku:</span> <a href="https://sampahkudev.github.io/landing-page/" target="_blank" rel="noopener noreferrer" class="text-teal-400 underline hover:text-teal-300">https://sampahkudev.github.io/landing-page/</a></div>
-            <div>5. <span class="text-rose-400 font-bold">Penelitian XGBoost:</span> <a href="https://qtskxoh94pb2sybdhca9sr.streamlit.app/" target="_blank" rel="noopener noreferrer" class="text-purple-400 underline hover:text-purple-300">Streamlit Dashboard</a></div>
-          </div>
-        `;
+        response = `<span style="color:var(--text-secondary)">
+          1. <span style="color:var(--text-primary)">SyncroApp</span> — <a href="https://syncroapp.github.io/login/" target="_blank" style="color:var(--accent);text-decoration:none">syncroapp.github.io</a><br/>
+          2. <span style="color:var(--text-primary)">Chicken Holic</span> — <a href="https://play.google.com/store/apps/details?id=com.chickenholic.app" target="_blank" style="color:var(--accent);text-decoration:none">Google Play Store</a><br/>
+          3. <span style="color:var(--text-primary)">Legend Badminton</span> — <a href="https://legendbadminton.com/" target="_blank" style="color:var(--accent);text-decoration:none">legendbadminton.com</a><br/>
+          4. <span style="color:var(--text-primary)">Sampahku</span> — <a href="https://sampahkudev.github.io/landing-page/" target="_blank" style="color:var(--accent);text-decoration:none">sampahkudev.github.io</a><br/>
+          5. <span style="color:var(--text-primary)">Penelitian XGBoost</span> — <a href="https://qtskxoh94pb2sybdhca9sr.streamlit.app/" target="_blank" style="color:var(--accent);text-decoration:none">Streamlit Dashboard</a>
+        </span>`;
         break;
       case 'stats':
-        response = `
-          <div class="text-zinc-300">
-            • IPK: <span class="text-emerald-400 font-bold">3.67 / 4.00</span> (D4 Teknik Informatika ULBI)<br/>
-            • Internship: <span class="text-amber-400 font-bold">4 Bulan</span> di CV Digisolf Technology Consulting<br/>
-            • Akurasi Riset XGBoost: <span class="text-rose-400 font-bold">WAPE 16.36%</span> (Item ID vs One-Hot)<br/>
-            • TOEIC Score: <span class="text-cyan-400 font-bold">655</span> | TOEFL: <span class="text-cyan-400 font-bold">480</span>
-          </div>
-        `;
+        response = `<span style="color:var(--text-secondary)">
+          · IPK: <span style="color:var(--text-primary)">3.67 / 4.00</span> (D4 Teknik Informatika ULBI)<br/>
+          · Magang: <span style="color:var(--text-primary)">4 bulan</span> di CV Digisolf Technology Consulting<br/>
+          · Riset XGBoost: <span style="color:var(--accent)">WAPE 16.36%</span> (Category Item ID vs One-Hot)<br/>
+          · TOEIC: <span style="color:var(--text-primary)">655</span> · TOEFL: <span style="color:var(--text-primary)">480</span>
+        </span>`;
         break;
       case 'contact':
-        response = `
-          <div class="text-zinc-300">
-            • Email: <a href="mailto:agung.nainggolan8008@gmail.com" class="text-rose-400 underline">agung.nainggolan8008@gmail.com</a><br/>
-            • WhatsApp: <a href="https://wa.me/6282360711385" target="_blank" class="text-emerald-400 underline">+62 823-6071-1385</a><br/>
-            • GitHub: <a href="https://github.com/agung6544" target="_blank" class="text-sky-400 underline">github.com/agung6544</a><br/>
-            • LinkedIn: <span class="text-blue-400">Agung Deriko Nainggolan</span>
-          </div>
-        `;
+        response = `<span style="color:var(--text-secondary)">
+          · Email: <a href="mailto:agung.nainggolan8008@gmail.com" style="color:var(--accent);text-decoration:none">agung.nainggolan8008@gmail.com</a><br/>
+          · WhatsApp: <a href="https://wa.me/6282360711385" target="_blank" style="color:var(--accent);text-decoration:none">+62 823-6071-1385</a><br/>
+          · GitHub: <a href="https://github.com/agung6544" target="_blank" style="color:var(--accent);text-decoration:none">github.com/agung6544</a><br/>
+          · LinkedIn: <a href="https://www.linkedin.com/in/agungderiko-nainggolan/" target="_blank" style="color:var(--accent);text-decoration:none">Agung Deriko Nainggolan</a>
+        </span>`;
         break;
-      case 'clear':
-        output.innerHTML = '';
-        return;
-      case '':
-        return;
       default:
-        response = `<span class="text-rose-400">Command not recognized: '${cmd}'. Ketik '<span class="text-white font-bold">help</span>' untuk melihat daftar perintah.</span>`;
+        response = `<span style="color:var(--text-muted)">Perintah '${cmd}' tidak dikenal. Ketik <span style="color:var(--accent)">help</span> untuk daftar perintah.</span>`;
     }
 
+    const row = document.createElement('div');
+    row.style.marginTop = '10px';
     row.innerHTML = `
-      <div class="flex items-center gap-2 text-zinc-500 font-mono text-xs">
-        <span class="text-rose-400">agung@portfolio</span>:<span class="text-amber-400">~</span>$ <span class="text-white">${cmd}</span>
+      <div class="font-mono" style="font-size:12px;color:var(--text-muted)">
+        <span style="color:var(--accent)">agung@portfolio</span>:~$ <span style="color:var(--text-primary)">${cmd}</span>
       </div>
-      <div class="pl-4 mt-1 text-xs font-mono">${response}</div>
+      <div class="font-mono" style="font-size:12px;padding-left:16px;margin-top:4px;line-height:1.65">${response}</div>
     `;
-
     output.appendChild(row);
     output.scrollTop = output.scrollHeight;
   }
 
-  // --- 8. SMOOTH SCROLL SPY & NAVBAR BLUR ---
+  // =====================================================================
+  // NAVBAR SCROLL
+  // =====================================================================
   function initNavScroll() {
-    const navbar = document.getElementById('navbar');
+    const navbar   = document.getElementById('navbar');
     const sections = document.querySelectorAll('section[id]');
     const navLinks = document.querySelectorAll('.nav-link');
 
@@ -941,27 +665,22 @@
       const scrollY = window.pageYOffset;
 
       if (navbar) {
-        if (scrollY > 50) {
-          navbar.classList.add('bg-zinc-950/80', 'backdrop-blur-xl', 'border-white/10', 'shadow-2xl');
-          navbar.classList.remove('bg-transparent', 'border-transparent');
+        if (scrollY > 40) {
+          navbar.classList.add('scrolled');
         } else {
-          navbar.classList.remove('bg-zinc-950/80', 'backdrop-blur-xl', 'border-white/10', 'shadow-2xl');
-          navbar.classList.add('bg-transparent', 'border-transparent');
+          navbar.classList.remove('scrolled');
         }
       }
 
-      sections.forEach((sec) => {
-        const top = sec.offsetTop - 120;
+      sections.forEach(sec => {
+        const top    = sec.offsetTop - 120;
         const height = sec.offsetHeight;
-        const id = sec.getAttribute('id');
-
+        const id     = sec.getAttribute('id');
         if (scrollY >= top && scrollY < top + height) {
-          navLinks.forEach((link) => {
-            link.classList.remove('text-rose-400');
-            link.classList.add('text-zinc-400');
+          navLinks.forEach(link => {
+            link.classList.remove('active');
             if (link.getAttribute('href') === `#${id}`) {
-              link.classList.add('text-rose-400');
-              link.classList.remove('text-zinc-400');
+              link.classList.add('active');
             }
           });
         }
@@ -969,31 +688,118 @@
     });
   }
 
-  // --- 9. MOBILE MENU TOGGLE ---
+  // =====================================================================
+  // MOBILE MENU
+  // =====================================================================
   function initMobileMenu() {
-    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-    const mobileMenu = document.getElementById('mobile-menu');
-    if (!mobileMenuBtn || !mobileMenu) return;
+    const btn  = document.getElementById('mobile-menu-btn');
+    const menu = document.getElementById('mobile-menu');
+    if (!btn || !menu) return;
 
-    mobileMenuBtn.addEventListener('click', () => {
-      mobileMenu.classList.toggle('hidden');
-    });
+    btn.addEventListener('click', () => menu.classList.toggle('hidden'));
 
-    document.querySelectorAll('.mobile-nav-link').forEach((link) => {
-      link.addEventListener('click', () => {
-        mobileMenu.classList.add('hidden');
-      });
+    document.querySelectorAll('.mobile-nav-link').forEach(link => {
+      link.addEventListener('click', () => menu.classList.add('hidden'));
     });
   }
 
-  // --- 10. INITIALIZATION ---
+  // =====================================================================
+  // RESPONSIVE HERO GRID
+  // =====================================================================
+  function initResponsiveHero() {
+    const heroGrid    = document.getElementById('hero-grid');
+    const photoCol    = document.getElementById('hero-photo-col');
+    if (!heroGrid || !photoCol) return;
+
+    function checkWidth() {
+      if (window.innerWidth < 900) {
+        heroGrid.style.gridTemplateColumns = '1fr';
+        photoCol.style.maxWidth = '340px';
+        photoCol.style.margin   = '0 auto';
+      } else {
+        heroGrid.style.gridTemplateColumns = '1fr 320px';
+        photoCol.style.maxWidth = '';
+        photoCol.style.margin   = '';
+      }
+    }
+
+    checkWidth();
+    window.addEventListener('resize', checkWidth);
+  }
+
+  // =====================================================================
+  // RESPONSIVE GRID ADJUSTMENTS
+  // =====================================================================
+  function initResponsiveGrids() {
+    const techGridEl    = document.getElementById('tech-grid');
+    const projectGridEl = document.getElementById('project-grid');
+    const certGridEl    = document.getElementById('cert-grid');
+    const aboutPillars  = document.getElementById('about-pillars');
+    const heroStats     = document.getElementById('hero-stats');
+    const aboutGrid     = document.querySelector('#about .grid[style*="300px"]');
+    const researchGrid  = document.querySelector('#research .grid[style*="380px"]');
+
+    function adjustGrids() {
+      const w = window.innerWidth;
+      if (techGridEl)    techGridEl.style.gridTemplateColumns    = w < 768 ? '1fr' : 'repeat(2,1fr)';
+      if (projectGridEl) projectGridEl.style.gridTemplateColumns = w < 768 ? '1fr' : 'repeat(2,1fr)';
+      if (certGridEl)    certGridEl.style.gridTemplateColumns    = w < 640 ? '1fr' : w < 1024 ? 'repeat(2,1fr)' : 'repeat(3,1fr)';
+      if (aboutPillars)  aboutPillars.style.gridTemplateColumns  = w < 640 ? '1fr' : '1fr 1fr';
+      if (heroStats)     heroStats.style.gridTemplateColumns     = w < 640 ? 'repeat(2,1fr)' : 'repeat(4,1fr)';
+    }
+
+    adjustGrids();
+    window.addEventListener('resize', adjustGrids);
+  }
+
+  // =====================================================================
+  // RESPONSIVE ABOUT & RESEARCH GRIDS
+  // =====================================================================
+  function initResponsiveLayouts() {
+    // About: 300px + 1fr -> stack on mobile
+    const aboutSection = document.getElementById('about');
+    const aboutInner   = aboutSection ? aboutSection.querySelector('.container-page > .grid') : null;
+    // Research: 1fr + 380px -> stack on medium
+    const researchSection = document.getElementById('research');
+    const researchInner   = researchSection ? researchSection.querySelector('.card > .grid') : null;
+
+    function adjustLayouts() {
+      const w = window.innerWidth;
+      if (aboutInner) {
+        aboutInner.style.gridTemplateColumns = w < 900 ? '1fr' : '300px 1fr';
+      }
+      if (researchInner) {
+        researchInner.style.gridTemplateColumns = w < 900 ? '1fr' : '1fr 380px';
+      }
+    }
+
+    adjustLayouts();
+    window.addEventListener('resize', adjustLayouts);
+  }
+
+  // =====================================================================
+  // RESEARCH IMAGE HOVER
+  // =====================================================================
+  function initResearchHover() {
+    const img = document.getElementById('research-img');
+    const card = img ? img.closest('.card') : null;
+    if (!img || !card) return;
+    card.addEventListener('mouseenter', () => img.style.transform = 'scale(1.03)');
+    card.addEventListener('mouseleave', () => img.style.transform = 'scale(1)');
+  }
+
+  // =====================================================================
+  // INIT
+  // =====================================================================
   document.addEventListener('DOMContentLoaded', () => {
-    initSpotlight();
     renderAll();
     initFilterButtons();
     initTerminal();
     initNavScroll();
     initMobileMenu();
+    initResponsiveHero();
+    initResponsiveGrids();
+    initResearchHover();
   });
-})();
 
+})();
