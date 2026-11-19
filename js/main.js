@@ -124,21 +124,23 @@
     const container = document.getElementById('education-list');
     if (!container) return;
     container.innerHTML = portfolioData.education.map(edu => `
-      <div class="card" style="padding:24px;border-radius:12px;display:flex;gap:20px;align-items:flex-start">
-        <div style="width:64px;height:64px;border-radius:10px;overflow:hidden;border:1px solid var(--border);background:var(--bg-deep);flex-shrink:0">
-          <img src="${edu.image}" alt="${edu.institution}" style="width:100%;height:100%;object-fit:cover;object-position:top;display:block" />
-        </div>
-        <div style="flex:1;min-width:0">
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:8px">
-            <span class="font-mono" style="font-size:11px;color:var(--text-muted)">${edu.period}</span>
-            <span class="font-mono" style="font-size:11px;color:var(--accent)">${edu.gpa}</span>
+      <div class="card" style="padding:22px;border-radius:12px">
+        <div class="edu-card-wrap">
+          <div style="width:56px;height:56px;border-radius:10px;overflow:hidden;border:1px solid var(--border);background:var(--bg-deep);flex-shrink:0">
+            <img src="${edu.image}" alt="${edu.institution}" style="width:100%;height:100%;object-fit:cover;object-position:top;display:block" />
           </div>
-          <h3 style="font-size:15px;font-weight:500;color:var(--text-primary);margin:0 0 3px">${edu.institution}</h3>
-          <p style="font-size:13px;color:var(--accent);margin:0 0 8px">${currentLang === 'id' ? edu.degreeId : edu.degreeEn}</p>
-          <p style="font-size:13px;line-height:1.6;color:var(--text-secondary);margin:0 0 8px">${currentLang === 'id' ? edu.descriptionId : edu.descriptionEn}</p>
-          <div class="flex items-center gap-1.5" style="font-size:12px;color:var(--text-muted)">
-            <i data-lucide="map-pin" style="width:12px;height:12px"></i>
-            <span>${edu.location}</span>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:8px">
+              <span class="font-mono" style="font-size:11px;color:var(--text-muted)">${edu.period}</span>
+              <span class="font-mono" style="font-size:11px;color:var(--accent)">${edu.gpa}</span>
+            </div>
+            <h3 style="font-size:15px;font-weight:500;color:var(--text-primary);margin:0 0 3px">${edu.institution}</h3>
+            <p style="font-size:13px;color:var(--accent);margin:0 0 8px">${currentLang === 'id' ? edu.degreeId : edu.degreeEn}</p>
+            <p style="font-size:13px;line-height:1.6;color:var(--text-secondary);margin:0 0 8px">${currentLang === 'id' ? edu.descriptionId : edu.descriptionEn}</p>
+            <div class="flex items-center gap-1.5" style="font-size:12px;color:var(--text-muted)">
+              <i data-lucide="map-pin" style="width:12px;height:12px"></i>
+              <span>${edu.location}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -216,17 +218,17 @@
           </h3>
           <span class="font-mono" style="font-size:11px;color:var(--text-muted)">${cat.skills.length} techs</span>
         </div>
-        <div class="grid gap-2" style="grid-template-columns:1fr 1fr">
+        <div class="skills-inner-grid">
           ${cat.skills.map(skill => `
             <div class="card" style="padding:12px;border-radius:8px">
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-                <div style="display:flex;align-items:center;gap:8px">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;gap:6px">
+                <div style="display:flex;align-items:center;gap:7px;min-width:0">
                   <i data-lucide="${skill.icon}" style="width:14px;height:14px;stroke:var(--text-muted);flex-shrink:0"></i>
-                  <span style="font-size:13px;font-weight:500;color:var(--text-primary)">${skill.name}</span>
+                  <span style="font-size:13px;font-weight:500;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${skill.name}</span>
                 </div>
-                <span class="font-mono" style="font-size:10px;color:${skill.level === 'Advanced' || skill.level === 'Expert' ? 'var(--accent)' : 'var(--text-muted)'}">${skill.level}</span>
+                <span class="font-mono" style="font-size:10px;flex-shrink:0;color:${skill.level === 'Advanced' || skill.level === 'Expert' ? 'var(--accent)' : 'var(--text-muted)'}">${skill.level}</span>
               </div>
-              <p style="font-size:11px;line-height:1.5;color:var(--text-muted);margin:0;padding-left:22px">${skill.desc}</p>
+              <p style="font-size:11px;line-height:1.5;color:var(--text-muted);margin:0;padding-left:21px">${skill.desc}</p>
             </div>
           `).join('')}
         </div>
@@ -249,9 +251,9 @@
       const isFeatured = proj.featured;
       const isResearch = proj.id === 'research-xgboost';
       return `
-        <div class="card card-accent" style="border-radius:12px;overflow:hidden;display:flex;flex-direction:column;${isFeatured ? 'grid-column:span 2' : ''}">
+        <div class="card card-accent ${isFeatured ? 'project-featured-span' : ''}" style="border-radius:12px;overflow:hidden;display:flex;flex-direction:column">
           <!-- Image -->
-          <div class="proj-img-wrap" style="${isFeatured ? 'height:280px' : 'height:200px'}">
+          <div class="proj-img-wrap" style="${isFeatured ? 'height:clamp(200px, 30vw, 280px)' : 'height:clamp(170px, 24vw, 210px)'}">
             <img src="${proj.image}" alt="${proj.title}" style="cursor:pointer" onclick="openProjectModal('${proj.id}')" />
             <!-- Category badge -->
             <div style="position:absolute;top:12px;left:12px;z-index:2">
@@ -345,13 +347,13 @@
     const isResearch = project.id === 'research-xgboost';
 
     modalContent.innerHTML = `
-      <div style="padding:28px">
+      <div class="modal-inner-pad">
         <!-- Header -->
-        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding-bottom:20px;border-bottom:1px solid var(--border)">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding-bottom:16px;border-bottom:1px solid var(--border)">
           <div>
             <span class="font-mono" style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em">${currentLang === 'id' ? project.badgeId : project.badgeEn}</span>
-            <h2 style="font-size:20px;font-weight:500;color:var(--text-primary);margin:6px 0 4px">${project.title}</h2>
-            <p style="font-size:13px;color:var(--text-secondary);margin:0">${currentLang === 'id' ? project.taglineId : project.taglineEn}</p>
+            <h2 style="font-size:18px;font-weight:500;color:var(--text-primary);margin:4px 0 2px" class="sm:text-xl">${project.title}</h2>
+            <p style="font-size:12.5px;color:var(--text-secondary);margin:0" class="sm:text-sm">${currentLang === 'id' ? project.taglineId : project.taglineEn}</p>
           </div>
           <button onclick="closeModal()" class="btn-icon" style="flex-shrink:0" aria-label="Tutup">
             <i data-lucide="x" style="width:16px;height:16px"></i>
@@ -359,12 +361,12 @@
         </div>
 
         <!-- Image -->
-        <div style="margin:20px 0;border-radius:10px;overflow:hidden;border:1px solid var(--border);background:var(--bg-deep);display:flex;align-items:center;justify-content:center;max-height:400px">
-          <img src="${project.image}" alt="${project.title}" style="width:100%;height:auto;max-height:400px;object-fit:contain;display:block" />
+        <div style="margin:16px 0;border-radius:10px;overflow:hidden;border:1px solid var(--border);background:var(--bg-deep);display:flex;align-items:center;justify-content:center;max-height:360px">
+          <img src="${project.image}" alt="${project.title}" style="width:100%;height:auto;max-height:360px;object-fit:contain;display:block" />
         </div>
 
         <!-- Content -->
-        <div style="display:flex;flex-direction:column;gap:20px">
+        <div style="display:flex;flex-direction:column;gap:18px">
           <div>
             <h4 style="font-size:13px;font-weight:500;color:var(--text-primary);margin:0 0 8px;display:flex;align-items:center;gap:6px">
               <i data-lucide="info" style="width:13px;height:13px;stroke:var(--text-muted)"></i>
@@ -389,54 +391,54 @@
           </div>
 
           ${isResearch && project.researchMetrics ? `
-            <div style="padding:20px;border-radius:10px;background:var(--bg-raised);border:1px solid rgba(245,158,11,0.2)">
-              <h4 style="font-size:13px;font-weight:500;color:var(--text-primary);margin:0 0 12px">Perbandingan metrik: One-Hot vs Category Item ID</h4>
-              <div style="overflow-x:auto">
-                <table style="width:100%;border-collapse:collapse;font-size:12px;font-family:'Geist Mono',monospace">
+            <div style="padding:16px;border-radius:10px;background:var(--bg-raised);border:1px solid rgba(245,158,11,0.2)">
+              <h4 style="font-size:13px;font-weight:500;color:var(--text-primary);margin:0 0 10px">Perbandingan metrik: One-Hot vs Category Item ID</h4>
+              <div class="table-scroll-wrap">
+                <table style="width:100%;border-collapse:collapse;font-size:11.5px;font-family:'Geist Mono',monospace;min-width:440px">
                   <thead>
                     <tr style="border-bottom:1px solid var(--border)">
-                      <th style="padding:8px 12px;text-align:left;color:var(--text-muted);font-weight:400">Metrik</th>
-                      <th style="padding:8px 12px;text-align:left;color:var(--text-muted);font-weight:400">One-Hot Encoding</th>
-                      <th style="padding:8px 12px;text-align:left;color:var(--accent);font-weight:500">Category Item ID</th>
-                      <th style="padding:8px 12px;text-align:left;color:var(--text-muted);font-weight:400">Kesimpulan</th>
+                      <th style="padding:6px 10px;text-align:left;color:var(--text-muted);font-weight:400">Metrik</th>
+                      <th style="padding:6px 10px;text-align:left;color:var(--text-muted);font-weight:400">One-Hot</th>
+                      <th style="padding:6px 10px;text-align:left;color:var(--accent);font-weight:500">Item ID</th>
+                      <th style="padding:6px 10px;text-align:left;color:var(--text-muted);font-weight:400">Hasil</th>
                     </tr>
                   </thead>
                   <tbody>
                     ${project.researchMetrics.table.map(row => `
                       <tr style="border-bottom:1px solid var(--border)">
-                        <td style="padding:8px 12px;color:var(--text-primary)">${row.metric}</td>
-                        <td style="padding:8px 12px;color:var(--text-secondary)">${row.oneHot}</td>
-                        <td style="padding:8px 12px;color:var(--accent);font-weight:500">${row.itemId}</td>
-                        <td style="padding:8px 12px;color:var(--text-muted)">Lebih akurat</td>
+                        <td style="padding:6px 10px;color:var(--text-primary)">${row.metric}</td>
+                        <td style="padding:6px 10px;color:var(--text-secondary)">${row.oneHot}</td>
+                        <td style="padding:6px 10px;color:var(--accent);font-weight:500">${row.itemId}</td>
+                        <td style="padding:6px 10px;color:var(--text-muted)">Lebih akurat</td>
                       </tr>
                     `).join('')}
                   </tbody>
                 </table>
               </div>
-              <p style="font-size:11px;color:var(--text-muted);margin:10px 0 0;font-style:italic">*Fitur Lag-1 (penjualan minggu lalu) memberikan pengaruh dominan ±34%.</p>
+              <p style="font-size:10.5px;color:var(--text-muted);margin:8px 0 0;font-style:italic">*Fitur Lag-1 memberikan pengaruh dominan ±34%.</p>
             </div>
           ` : ''}
 
           <div>
-            <h4 style="font-size:13px;font-weight:500;color:var(--text-primary);margin:0 0 10px;display:flex;align-items:center;gap:6px">
+            <h4 style="font-size:13px;font-weight:500;color:var(--text-primary);margin:0 0 8px;display:flex;align-items:center;gap:6px">
               <i data-lucide="code" style="width:13px;height:13px;stroke:var(--text-muted)"></i> Tech stack
             </h4>
-            <div style="display:flex;flex-wrap:wrap;gap:6px">
+            <div style="display:flex;flex-wrap:wrap;gap:5px">
               ${project.techStack.map(t => `<span class="tech-chip">${t}</span>`).join('')}
             </div>
           </div>
         </div>
 
         <!-- Footer -->
-        <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
-          <div style="display:flex;align-items:center;gap:8px">
+        <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
             ${project.links.demo ? `
-              <a href="${project.links.demo}" target="_blank" rel="noopener noreferrer" class="btn-primary" style="font-size:12px;padding:8px 16px;gap:6px;text-decoration:none">
+              <a href="${project.links.demo}" target="_blank" rel="noopener noreferrer" class="btn-primary" style="font-size:12px;padding:7px 14px;gap:6px;text-decoration:none">
                 <i data-lucide="${project.links.demoType === 'playstore' ? 'smartphone' : project.links.demoType === 'streamlit' ? 'activity' : 'external-link'}" style="width:13px;height:13px"></i>
-                <span>${project.links.demoType === 'playstore' ? 'Google Play Store' : project.links.demoType === 'streamlit' ? 'Streamlit Dashboard' : (currentLang === 'id' ? 'Kunjungi website' : 'Open demo')}</span>
+                <span>${project.links.demoType === 'playstore' ? 'Google Play' : project.links.demoType === 'streamlit' ? 'Streamlit App' : (currentLang === 'id' ? 'Buka Website' : 'Open demo')}</span>
               </a>
             ` : ''}
-            <a href="${project.links.github}" target="_blank" rel="noopener noreferrer" class="btn-secondary" style="font-size:12px;padding:8px 16px;gap:6px;text-decoration:none">
+            <a href="${project.links.github}" target="_blank" rel="noopener noreferrer" class="btn-secondary" style="font-size:12px;padding:7px 14px;gap:6px;text-decoration:none">
               <i data-lucide="github" style="width:13px;height:13px"></i> GitHub
             </a>
           </div>
@@ -457,11 +459,11 @@
     if (!cert || !modalContainer || !modalContent) return;
 
     modalContent.innerHTML = `
-      <div style="padding:28px">
-        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding-bottom:16px;border-bottom:1px solid var(--border)">
+      <div class="modal-inner-pad">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding-bottom:14px;border-bottom:1px solid var(--border)">
           <div>
-            <span class="font-mono" style="font-size:11px;color:var(--text-muted)">${cert.type}</span>
-            <h3 style="font-size:18px;font-weight:500;color:var(--text-primary);margin:6px 0 2px">${cert.title}</h3>
+            <span class="font-mono" style="font-size:10.5px;color:var(--text-muted)">${cert.type}</span>
+            <h3 style="font-size:16px;font-weight:500;color:var(--text-primary);margin:4px 0 2px" class="sm:text-lg">${cert.title}</h3>
             <p style="font-size:12px;color:var(--accent);margin:0">${cert.issuer} · ${cert.date}</p>
           </div>
           <button onclick="closeModal()" class="btn-icon" aria-label="Tutup">
@@ -469,17 +471,17 @@
           </button>
         </div>
 
-        <div style="margin:20px 0;border-radius:10px;overflow:hidden;border:1px solid var(--border);background:var(--bg-deep);display:flex;align-items:center;justify-content:center">
-          <img src="${cert.image}" alt="${cert.title}" style="width:100%;height:auto;max-height:500px;object-fit:contain;display:block" />
+        <div style="margin:16px 0;border-radius:10px;overflow:hidden;border:1px solid var(--border);background:var(--bg-deep);display:flex;align-items:center;justify-content:center">
+          <img src="${cert.image}" alt="${cert.title}" style="width:100%;height:auto;max-height:420px;object-fit:contain;display:block" />
         </div>
 
-        <p style="font-size:13px;line-height:1.65;color:var(--text-secondary);margin:0 0 20px">${currentLang === 'id' ? cert.descriptionId : cert.descriptionEn}</p>
+        <p style="font-size:13px;line-height:1.65;color:var(--text-secondary);margin:0 0 16px">${currentLang === 'id' ? cert.descriptionId : cert.descriptionEn}</p>
 
-        <div style="display:flex;align-items:center;justify-content:space-between;padding-top:16px;border-top:1px solid var(--border)">
-          <span class="flex items-center gap-2 font-mono" style="font-size:12px;color:var(--text-muted)">
-            <i data-lucide="shield-check" style="width:14px;height:14px;stroke:var(--text-muted)"></i> Authentic & Verified
+        <div style="display:flex;align-items:center;justify-content:space-between;padding-top:14px;border-top:1px solid var(--border)">
+          <span class="flex items-center gap-1.5 font-mono" style="font-size:11px;color:var(--text-muted)">
+            <i data-lucide="shield-check" style="width:13px;height:13px;stroke:var(--text-muted)"></i> Authentic & Verified
           </span>
-          <button onclick="closeModal()" class="btn-secondary" style="font-size:12px;padding:7px 14px">Tutup</button>
+          <button onclick="closeModal()" class="btn-secondary" style="font-size:12px;padding:6px 14px">Tutup</button>
         </div>
       </div>
     `;
@@ -692,89 +694,33 @@
   // MOBILE MENU
   // =====================================================================
   function initMobileMenu() {
-    const btn  = document.getElementById('mobile-menu-btn');
-    const menu = document.getElementById('mobile-menu');
+    const btn    = document.getElementById('mobile-menu-btn');
+    const menu   = document.getElementById('mobile-menu');
+    const navbar = document.getElementById('navbar');
     if (!btn || !menu) return;
 
-    btn.addEventListener('click', () => menu.classList.toggle('hidden'));
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      menu.classList.toggle('hidden');
+    });
 
     document.querySelectorAll('.mobile-nav-link').forEach(link => {
       link.addEventListener('click', () => menu.classList.add('hidden'));
     });
-  }
 
-  // =====================================================================
-  // RESPONSIVE HERO GRID
-  // =====================================================================
-  function initResponsiveHero() {
-    const heroGrid    = document.getElementById('hero-grid');
-    const photoCol    = document.getElementById('hero-photo-col');
-    if (!heroGrid || !photoCol) return;
-
-    function checkWidth() {
-      if (window.innerWidth < 900) {
-        heroGrid.style.gridTemplateColumns = '1fr';
-        photoCol.style.maxWidth = '340px';
-        photoCol.style.margin   = '0 auto';
-      } else {
-        heroGrid.style.gridTemplateColumns = '1fr 320px';
-        photoCol.style.maxWidth = '';
-        photoCol.style.margin   = '';
+    // Close on outside tap
+    document.addEventListener('click', (e) => {
+      if (navbar && !navbar.contains(e.target) && !menu.classList.contains('hidden')) {
+        menu.classList.add('hidden');
       }
-    }
+    });
 
-    checkWidth();
-    window.addEventListener('resize', checkWidth);
-  }
-
-  // =====================================================================
-  // RESPONSIVE GRID ADJUSTMENTS
-  // =====================================================================
-  function initResponsiveGrids() {
-    const techGridEl    = document.getElementById('tech-grid');
-    const projectGridEl = document.getElementById('project-grid');
-    const certGridEl    = document.getElementById('cert-grid');
-    const aboutPillars  = document.getElementById('about-pillars');
-    const heroStats     = document.getElementById('hero-stats');
-    const aboutGrid     = document.querySelector('#about .grid[style*="300px"]');
-    const researchGrid  = document.querySelector('#research .grid[style*="380px"]');
-
-    function adjustGrids() {
-      const w = window.innerWidth;
-      if (techGridEl)    techGridEl.style.gridTemplateColumns    = w < 768 ? '1fr' : 'repeat(2,1fr)';
-      if (projectGridEl) projectGridEl.style.gridTemplateColumns = w < 768 ? '1fr' : 'repeat(2,1fr)';
-      if (certGridEl)    certGridEl.style.gridTemplateColumns    = w < 640 ? '1fr' : w < 1024 ? 'repeat(2,1fr)' : 'repeat(3,1fr)';
-      if (aboutPillars)  aboutPillars.style.gridTemplateColumns  = w < 640 ? '1fr' : '1fr 1fr';
-      if (heroStats)     heroStats.style.gridTemplateColumns     = w < 640 ? 'repeat(2,1fr)' : 'repeat(4,1fr)';
-    }
-
-    adjustGrids();
-    window.addEventListener('resize', adjustGrids);
-  }
-
-  // =====================================================================
-  // RESPONSIVE ABOUT & RESEARCH GRIDS
-  // =====================================================================
-  function initResponsiveLayouts() {
-    // About: 300px + 1fr -> stack on mobile
-    const aboutSection = document.getElementById('about');
-    const aboutInner   = aboutSection ? aboutSection.querySelector('.container-page > .grid') : null;
-    // Research: 1fr + 380px -> stack on medium
-    const researchSection = document.getElementById('research');
-    const researchInner   = researchSection ? researchSection.querySelector('.card > .grid') : null;
-
-    function adjustLayouts() {
-      const w = window.innerWidth;
-      if (aboutInner) {
-        aboutInner.style.gridTemplateColumns = w < 900 ? '1fr' : '300px 1fr';
+    // Close on Esc
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !menu.classList.contains('hidden')) {
+        menu.classList.add('hidden');
       }
-      if (researchInner) {
-        researchInner.style.gridTemplateColumns = w < 900 ? '1fr' : '1fr 380px';
-      }
-    }
-
-    adjustLayouts();
-    window.addEventListener('resize', adjustLayouts);
+    });
   }
 
   // =====================================================================
@@ -1325,12 +1271,9 @@
     initTerminal();
     initNavScroll();
     initMobileMenu();
-    initResponsiveHero();
-    initResponsiveGrids();
-    initResponsiveLayouts();
     initResearchHover();
 
-    // New features
+    // Features
     initScrollProgress();
     initBackToTop();
     initScrollReveal();

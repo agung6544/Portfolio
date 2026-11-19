@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
   <!-- Primary Meta Tags -->
@@ -127,14 +127,13 @@
   <main style="padding-top: 80px">
 
     <!-- HERO SECTION -->
-    <section id="hero" class="container-page" style="padding-top:64px;padding-bottom:80px;max-width:1200px">
-      <div class="grid gap-16 items-center" style="grid-template-columns:1fr;max-width:1200px">
-
+    <section id="hero" class="container-page" style="padding-top:40px;padding-bottom:56px">
+      <div>
         <!-- Split: Text left, photo right -->
-        <div class="grid gap-16 items-start" style="grid-template-columns:1fr 340px" id="hero-grid">
+        <div class="hero-layout-grid" id="hero-grid">
 
           <!-- Text column -->
-          <div class="fade-up fade-up-1" style="display:flex;flex-direction:column;gap:24px">
+          <div class="fade-up fade-up-1" style="display:flex;flex-direction:column;gap:20px">
             <!-- Available indicator -->
             <div class="flex items-center gap-2" style="font-family:'Geist Mono',monospace;font-size:12px;color:var(--text-muted)">
               <span class="status-dot"></span>
@@ -144,24 +143,24 @@
             </div>
 
             <!-- Name & title -->
-            <div style="display:flex;flex-direction:column;gap:8px">
-              <h1 style="font-size:clamp(36px,5vw,56px);font-weight:500;line-height:1.05;letter-spacing:-0.025em;color:var(--text-primary);margin:0" class="cursor-blink">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <h1 style="font-size:clamp(30px,7vw,54px);font-weight:500;line-height:1.06;letter-spacing:-0.025em;color:var(--text-primary);margin:0" class="cursor-blink">
                 Agung Deriko<br>Nainggolan
               </h1>
-              <p style="font-size:16px;font-weight:400;color:var(--text-secondary);margin:0">
+              <p style="font-size:15px;font-weight:400;color:var(--text-secondary);margin:0" class="sm:text-base">
                 Web & Mobile Developer · D4 Teknik Informatika ULBI
               </p>
             </div>
 
             <!-- Summary -->
-            <p style="font-size:14px;line-height:1.65;color:var(--text-secondary);margin:0;max-width:480px"
+            <p style="font-size:13.5px;line-height:1.65;color:var(--text-secondary);margin:0;max-width:520px" class="sm:text-sm"
               data-i18n-id="Lulusan D4 Teknik Informatika ULBI (IPK 3.67) dengan keahlian Frontend & Mobile Development. Membangun aplikasi web dan mobile lintas platform menggunakan React, Flutter, dan FlutterFlow, dengan pengalaman integrasi REST API, manajemen state, dan riset terapan Machine Learning."
               data-i18n-en="Informatics Engineering graduate from ULBI (GPA 3.67/4.00) specialising in Frontend & Mobile Development. Building production web and cross-platform apps with React, Flutter, and FlutterFlow, with REST API integration, state management, and applied Machine Learning research.">
               Lulusan D4 Teknik Informatika ULBI (IPK 3.67) dengan keahlian Frontend & Mobile Development. Membangun aplikasi web dan mobile lintas platform menggunakan React, Flutter, dan FlutterFlow, dengan pengalaman integrasi REST API, manajemen state, dan riset terapan Machine Learning.
             </p>
 
             <!-- Actions -->
-            <div class="flex flex-wrap items-center gap-3">
+            <div class="flex flex-wrap items-center gap-2.5 sm:gap-3">
               <a href="#projects" class="btn-primary">
                 <i data-lucide="layers" style="width:14px;height:14px"></i>
                 <span data-i18n-id="Lihat Proyek" data-i18n-en="See Projects">Lihat Proyek</span>
@@ -179,7 +178,7 @@
             </div>
 
             <!-- Stats -->
-            <div id="hero-stats" class="grid gap-3" style="grid-template-columns:repeat(4,1fr);padding-top:8px;border-top:1px solid var(--border)">
+            <div id="hero-stats" class="hero-stats-grid">
               <!-- Rendered by JS -->
             </div>
           </div>
@@ -299,11 +298,11 @@
     </section>
 
     <!-- ABOUT SECTION -->
-    <section id="about" style="padding:80px 0;border-top:1px solid var(--border)" class="reveal">
+    <section id="about" class="section-padding reveal">
       <div class="container-page" style="max-width:1200px">
 
         <!-- Section header -->
-        <div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;margin-bottom:56px">
+        <div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;margin-bottom:44px">
           <span class="section-label">
             <i data-lucide="user" style="width:12px;height:12px"></i> Tentang saya
           </span>
@@ -315,12 +314,12 @@
           </p>
         </div>
 
-        <div class="grid gap-10 items-start" style="grid-template-columns:300px 1fr">
+        <div class="about-layout-grid">
 
           <!-- Profile card -->
-          <div class="card" style="padding:24px;border-radius:14px">
-            <div class="flex items-center gap-4">
-              <div style="width:72px;height:72px;border-radius:10px;overflow:hidden;border:1px solid var(--border);flex-shrink:0;background:var(--bg-deep)">
+          <div class="card" style="padding:22px;border-radius:14px">
+            <div class="flex items-center gap-3.5 sm:gap-4">
+              <div style="width:64px;height:64px;border-radius:10px;overflow:hidden;border:1px solid var(--border);flex-shrink:0;background:var(--bg-deep)">
                 <img src="assets/agung-about.png" alt="Agung Deriko Nainggolan"
                   style="width:100%;height:100%;object-fit:cover;object-position:top;display:block" />
               </div>
@@ -335,7 +334,7 @@
             </div>
 
             <!-- Info list -->
-            <div class="font-mono" style="margin-top:20px;padding-top:20px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:0;font-size:12px">
+            <div class="font-mono" style="margin-top:18px;padding-top:16px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:0;font-size:12px">
               <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
                 <span style="color:var(--text-muted)">Status</span>
                 <span style="color:var(--text-primary);font-weight:500">Fresh Graduate</span>
@@ -356,11 +355,11 @@
           </div>
 
           <!-- Paragraphs & pillars -->
-          <div style="display:flex;flex-direction:column;gap:24px">
+          <div style="display:flex;flex-direction:column;gap:20px">
             <div id="about-paragraphs" style="display:flex;flex-direction:column;gap:14px;font-size:14px;line-height:1.65;color:var(--text-secondary)">
               <!-- Rendered by JS -->
             </div>
-            <div id="about-pillars" class="grid gap-4" style="grid-template-columns:1fr 1fr;padding-top:8px">
+            <div id="about-pillars" class="about-pillars-grid">
               <!-- Rendered by JS -->
             </div>
           </div>
@@ -370,9 +369,9 @@
     </section>
 
     <!-- EDUCATION SECTION -->
-    <section id="education" style="padding:80px 0;border-top:1px solid var(--border)" class="reveal">
+    <section id="education" class="section-padding reveal">
       <div class="container-page" style="max-width:1200px">
-        <div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;margin-bottom:56px">
+        <div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;margin-bottom:44px">
           <span class="section-label">
             <i data-lucide="graduation-cap" style="width:12px;height:12px"></i> Riwayat akademis
           </span>
@@ -388,9 +387,9 @@
     </section>
 
     <!-- TECH STACK & SKILLS SECTION -->
-    <section id="skills" style="padding:80px 0;border-top:1px solid var(--border);background-color:var(--bg-deep)" class="reveal">
+    <section id="skills" class="section-padding reveal" style="background-color:var(--bg-deep)">
       <div class="container-page" style="max-width:1200px">
-        <div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;margin-bottom:48px">
+        <div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;margin-bottom:40px">
           <span class="section-label">
             <i data-lucide="cpu" style="width:12px;height:12px"></i> Tech stack & kemampuan
           </span>
@@ -400,7 +399,7 @@
           </p>
 
           <!-- Filter tabs -->
-          <div class="flex flex-wrap justify-center gap-2 mt-6">
+          <div class="flex flex-wrap justify-center gap-1.5 sm:gap-2 mt-5">
             <button class="filter-btn active tech-filter-btn" data-filter="all">Semua</button>
             <button class="filter-btn tech-filter-btn" data-filter="frontend">Frontend</button>
             <button class="filter-btn tech-filter-btn" data-filter="mobile">Mobile</button>
@@ -409,16 +408,16 @@
           </div>
         </div>
 
-        <div id="tech-grid" class="grid gap-6" style="grid-template-columns:repeat(2,1fr)">
+        <div id="tech-grid" class="tech-cards-grid">
           <!-- Rendered by JS -->
         </div>
       </div>
     </section>
 
     <!-- EXPERIENCE SECTION -->
-    <section id="experience" style="padding:80px 0;border-top:1px solid var(--border)" class="reveal">
+    <section id="experience" class="section-padding reveal">
       <div class="container-page" style="max-width:1200px">
-        <div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;margin-bottom:56px">
+        <div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;margin-bottom:44px">
           <span class="section-label">
             <i data-lucide="briefcase" style="width:12px;height:12px"></i> Pengalaman kerja & organisasi
           </span>
@@ -434,9 +433,9 @@
     </section>
 
     <!-- FEATURED PROJECTS SECTION -->
-    <section id="projects" style="padding:80px 0;border-top:1px solid var(--border);background-color:var(--bg-deep)" class="reveal">
+    <section id="projects" class="section-padding reveal" style="background-color:var(--bg-deep)">
       <div class="container-page" style="max-width:1200px">
-        <div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;margin-bottom:48px">
+        <div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;margin-bottom:40px">
           <span class="section-label">
             <i data-lucide="layers" style="width:12px;height:12px"></i> Proyek terpilih
           </span>
@@ -448,7 +447,7 @@
           </p>
 
           <!-- Project filter -->
-          <div class="flex flex-wrap justify-center gap-2 mt-6">
+          <div class="flex flex-wrap justify-center gap-1.5 sm:gap-2 mt-5">
             <button class="filter-btn active project-filter-btn" data-filter="all">Semua</button>
             <button class="filter-btn project-filter-btn" data-filter="web">Web</button>
             <button class="filter-btn project-filter-btn" data-filter="mobile">Mobile</button>
@@ -456,36 +455,36 @@
           </div>
         </div>
 
-        <div id="project-grid" class="grid gap-6" style="grid-template-columns:repeat(2,1fr)">
+        <div id="project-grid" class="projects-cards-grid">
           <!-- Rendered by JS -->
         </div>
       </div>
     </section>
 
     <!-- RESEARCH SECTION -->
-    <section id="research" style="padding:80px 0;border-top:1px solid var(--border)" class="reveal">
+    <section id="research" class="section-padding reveal">
       <div class="container-page" style="max-width:1200px">
-        <div class="card research-card" style="padding:48px;border-radius:16px;position:relative">
+        <div class="card research-card research-card-box">
 
-          <div class="grid gap-10 items-center" style="grid-template-columns:1fr 380px">
+          <div class="research-card-content">
 
             <!-- Left: text -->
-            <div style="display:flex;flex-direction:column;gap:20px">
+            <div style="display:flex;flex-direction:column;gap:18px">
               <div>
-                <span class="section-label" style="margin-bottom:12px;display:inline-flex">
+                <span class="section-label" style="margin-bottom:10px;display:inline-flex">
                   <i data-lucide="bar-chart-2" style="width:12px;height:12px"></i> Riset tugas akhir
                 </span>
-                <h3 style="font-size:22px;font-weight:500;color:var(--text-primary);line-height:1.25;margin:12px 0 0">
+                <h3 style="font-size:20px;font-weight:500;color:var(--text-primary);line-height:1.25;margin:10px 0 0" class="sm:text-2xl">
                   Representasi Fitur Kategorikal untuk Peramalan Penjualan Menu Mingguan dengan XGBoost
                 </h3>
               </div>
 
-              <p style="font-size:14px;line-height:1.65;color:var(--text-secondary);margin:0">
+              <p style="font-size:13.5px;line-height:1.65;color:var(--text-secondary);margin:0" class="sm:text-sm">
                 Mengevaluasi performa representasi fitur kategorikal pada data Point-of-Sale riil — <strong style="color:var(--text-primary);font-weight:500">2.646 transaksi</strong>. Category Item ID terbukti mengungguli One-Hot Encoding pada seluruh metrik evaluasi.
               </p>
 
               <!-- Metrics -->
-              <div class="grid gap-3" style="grid-template-columns:repeat(3,1fr)">
+              <div class="research-metrics-grid">
                 <div class="metric-box">
                   <span class="font-mono" style="font-size:11px;color:var(--text-muted)">Akurasi terbaik</span>
                   <div class="metric-value accent">16,36%</div>
@@ -506,7 +505,7 @@
               </div>
 
               <!-- Actions -->
-              <div class="flex flex-wrap items-center gap-3 mt-2">
+              <div class="flex flex-wrap items-center gap-2.5 sm:gap-3 mt-1">
                 <a href="https://qtskxoh94pb2sybdhca9sr.streamlit.app/" target="_blank" rel="noopener noreferrer"
                   class="btn-primary" style="background-color:#d97706">
                   <i data-lucide="activity" style="width:14px;height:14px"></i>
@@ -525,7 +524,7 @@
                 <img src="assets/research-dashboard.png" alt="Dashboard Prediksi Streamlit"
                   style="width:100%;height:auto;display:block;transition:transform 500ms var(--ease)" id="research-img" />
               </div>
-              <div style="padding:12px 14px;border-top:1px solid var(--border);display:flex;align-items:center;gap:6px">
+              <div style="padding:10px 14px;border-top:1px solid var(--border);display:flex;align-items:center;gap:6px">
                 <i data-lucide="layout-dashboard" style="width:13px;height:13px;stroke:var(--text-muted)"></i>
                 <span class="font-mono" style="font-size:11px;color:var(--text-muted)">Antarmuka dashboard prediksi Streamlit</span>
               </div>
@@ -537,9 +536,9 @@
     </section>
 
     <!-- CERTIFICATES SECTION -->
-    <section id="certificates" style="padding:80px 0;border-top:1px solid var(--border);background-color:var(--bg-deep)" class="reveal">
+    <section id="certificates" class="section-padding reveal" style="background-color:var(--bg-deep)">
       <div class="container-page" style="max-width:1200px">
-        <div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;margin-bottom:56px">
+        <div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;margin-bottom:44px">
           <span class="section-label">
             <i data-lucide="award" style="width:12px;height:12px"></i> Sertifikasi & kompetensi
           </span>
@@ -548,14 +547,14 @@
             Sertifikasi industri, pemrograman, manajemen proyek, dan kemampuan bahasa Inggris terverifikasi.
           </p>
         </div>
-        <div id="cert-grid" class="grid gap-5" style="grid-template-columns:repeat(3,1fr)">
+        <div id="cert-grid" class="certs-cards-grid">
           <!-- Rendered by JS -->
         </div>
       </div>
     </section>
 
     <!-- TERMINAL EASTER EGG -->
-    <section style="padding:64px 0;border-top:1px solid var(--border)" class="reveal">
+    <section class="section-padding reveal">
       <div class="container-page" style="max-width:800px">
         <div class="terminal-window">
           <div class="terminal-header">
@@ -596,21 +595,21 @@
     </section>
 
     <!-- CONTACT SECTION -->
-    <section id="contact" style="padding:80px 0;border-top:1px solid var(--border)" class="reveal">
+    <section id="contact" class="section-padding reveal">
       <div class="container-page" style="max-width:1200px">
-        <div style="text-align:center;max-width:480px;margin-inline:auto;margin-bottom:56px;display:flex;flex-direction:column;gap:12px">
+        <div style="text-align:center;max-width:480px;margin-inline:auto;margin-bottom:44px;display:flex;flex-direction:column;gap:12px">
           <span class="section-label" style="justify-content:center">
             <i data-lucide="message-square" style="width:12px;height:12px"></i> Kontak
           </span>
           <h2 class="section-title">Siap berkontribusi di tim Anda</h2>
-          <p style="font-size:14px;line-height:1.65;color:var(--text-secondary);margin:0"
+          <p style="font-size:13.5px;line-height:1.65;color:var(--text-secondary);margin:0" class="sm:text-sm"
             data-i18n-id="Tertarik merekrut saya sebagai Frontend / Mobile Developer, mendiskusikan peluang proyek, atau berdiskusi teknis?"
             data-i18n-en="Interested in hiring me as a Frontend / Mobile Developer, discussing a project, or a technical chat?">
             Tertarik merekrut saya sebagai Frontend / Mobile Developer, mendiskusikan peluang proyek, atau berdiskusi teknis?
           </p>
         </div>
 
-        <div class="grid gap-5" style="grid-template-columns:repeat(3,1fr);max-width:900px;margin-inline:auto">
+        <div class="contact-cards-grid">
 
           <!-- WhatsApp -->
           <a href="https://wa.me/6282360711385?text=Halo%20Agung,%20saya%20melihat%20portofolio%20Anda"

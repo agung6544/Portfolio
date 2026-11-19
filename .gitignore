@@ -12,8 +12,6 @@ desktop.ini
 .vscode/
 .idea/
 
-# Agents & AI
-# Agents & AI
-agents/
-
+# Agents
+.agents/
 agents/
