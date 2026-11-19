@@ -82,6 +82,13 @@
           <span id="current-lang-label">ID</span>
         </button>
 
+        <!-- Command palette trigger -->
+        <button id="cmd-trigger" onclick="openCmd()" title="Command Palette (Ctrl+K)">
+          <i data-lucide="search" style="width:12px;height:12px"></i>
+          <span>Cari…</span>
+          <span class="kbd">⌘K</span>
+        </button>
+
         <!-- CTA -->
         <a href="https://wa.me/6282360711385?text=Halo%20Agung,%20saya%20tertarik%20dengan%20profil%20Anda"
           target="_blank" rel="noopener noreferrer" class="btn-primary hidden sm:inline-flex" style="padding:8px 16px">
@@ -138,7 +145,7 @@
 
             <!-- Name & title -->
             <div style="display:flex;flex-direction:column;gap:8px">
-              <h1 style="font-size:clamp(36px,5vw,56px);font-weight:500;line-height:1.05;letter-spacing:-0.025em;color:var(--text-primary);margin:0">
+              <h1 style="font-size:clamp(36px,5vw,56px);font-weight:500;line-height:1.05;letter-spacing:-0.025em;color:var(--text-primary);margin:0" class="cursor-blink">
                 Agung Deriko<br>Nainggolan
               </h1>
               <p style="font-size:16px;font-weight:400;color:var(--text-secondary);margin:0">
@@ -177,24 +184,112 @@
             </div>
           </div>
 
-          <!-- Photo column -->
-          <div class="fade-up fade-up-2" id="hero-photo-col">
-            <div class="card" style="overflow:hidden;border-radius:14px">
-              <!-- Image -->
-              <div style="aspect-ratio:4/5;overflow:hidden;background:var(--bg-deep)">
-                <img src="assets/agung-hero.png" alt="Agung Deriko Nainggolan"
-                  style="width:100%;height:100%;object-fit:cover;object-position:top;display:block" />
+          <!-- Photo column: Interactive Lanyard ID Badge -->
+          <div class="fade-up fade-up-2" id="hero-photo-col" style="position:relative">
+            <div id="lanyard-rig" class="lanyard-rig">
+              <!-- SVG Strap Ribbon Hanging From Above -->
+              <svg id="lanyard-svg" class="lanyard-svg" viewBox="0 0 340 150" preserveAspectRatio="none">
+                <defs>
+                  <!-- Strap Ribbon Gradient -->
+                  <linearGradient id="lanyard-ribbon-grad" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#141417" />
+                    <stop offset="25%" stop-color="#232328" />
+                    <stop offset="47%" stop-color="#232328" />
+                    <stop offset="50%" stop-color="#e5484d" />
+                    <stop offset="53%" stop-color="#232328" />
+                    <stop offset="75%" stop-color="#232328" />
+                    <stop offset="100%" stop-color="#141417" />
+                  </linearGradient>
+                </defs>
+                <path id="lanyard-path-shadow" d="" fill="none" stroke="rgba(0,0,0,0.5)" stroke-width="18" stroke-linecap="round" />
+                <path id="lanyard-path" d="" fill="none" stroke="url(#lanyard-ribbon-grad)" stroke-width="15" stroke-linecap="round" />
+                <path id="lanyard-stitch-l" d="" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1" stroke-dasharray="3 2" />
+                <path id="lanyard-stitch-r" d="" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1" stroke-dasharray="3 2" />
+              </svg>
+
+              <!-- Metal Clasp Rig (Anchored to top of badge) -->
+              <div id="lanyard-clasp" class="lanyard-clasp">
+                <div class="clasp-band"></div>
+                <div class="clasp-ring"></div>
+                <div class="clasp-hook"></div>
               </div>
-              <!-- Caption bar -->
-              <div style="padding:14px 16px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
-                <div>
-                  <p style="font-size:13px;font-weight:500;color:var(--text-primary);margin:0">Agung Deriko Nainggolan</p>
-                  <p class="font-mono" style="font-size:11px;color:var(--text-muted);margin:2px 0 0">D4 Teknik Informatika — ULBI</p>
+
+              <!-- Interactive Badge Card -->
+              <div id="lanyard-card" class="lanyard-card" role="button" tabindex="0" aria-label="Kartu Lanyard Interaktif - Tarik untuk bermain">
+                <!-- 3D Glare sheen overlay -->
+                <div class="badge-glare" id="badge-glare"></div>
+
+                <!-- Lanyard Slot Cutout -->
+                <div class="badge-punch-slot">
+                  <div class="punch-hole"></div>
                 </div>
-                <div class="flex items-center gap-1.5" style="font-family:'Geist Mono',monospace;font-size:11px;color:var(--text-muted)">
-                  <span class="status-dot"></span>
-                  <span>Dev</span>
+
+                <!-- Badge Header -->
+                <div class="badge-header-bar">
+                  <div class="flex items-center gap-1.5 font-mono text-[10px] text-zinc-400">
+                    <i data-lucide="shield-check" style="width:12px;height:12px;stroke:var(--accent)"></i>
+                    <span class="tracking-widest uppercase font-semibold text-white">ENGINEER PASS // 2026</span>
+                  </div>
+                  <div class="flex items-center gap-1.5 font-mono text-[10px]">
+                    <span class="status-dot"></span>
+                    <span class="text-zinc-400 font-semibold">ACTIVE</span>
+                  </div>
                 </div>
+
+                <!-- Photo Frame -->
+                <div class="badge-photo-frame">
+                  <img src="assets/agung-hero.png" alt="Agung Deriko Nainggolan" class="badge-photo-img" draggable="false" />
+                  <div class="badge-photo-tag">
+                    <span class="font-mono text-[10px] text-zinc-300 font-medium">ULBI · INFORMATICS</span>
+                  </div>
+                </div>
+
+                <!-- Card Information Section -->
+                <div class="badge-body">
+                  <div class="flex items-start justify-between gap-2">
+                    <div>
+                      <h3 class="badge-name">Agung Deriko Nainggolan</h3>
+                      <p class="badge-role font-mono">Web & Mobile Developer</p>
+                    </div>
+                    <!-- Smart Card Gold Contact Chip -->
+                    <div class="badge-chip" title="RFID Microchip">
+                      <div class="chip-line"></div>
+                      <div class="chip-line"></div>
+                      <div class="chip-center"></div>
+                    </div>
+                  </div>
+
+                  <!-- Barcode & Meta Strip -->
+                  <div class="badge-meta-strip font-mono">
+                    <div class="flex flex-col">
+                      <span class="text-[9px] text-zinc-500 uppercase tracking-wider">DEV ID CODE</span>
+                      <span class="text-[11px] font-bold text-zinc-300 tracking-wider">ADN-3.67-PASS</span>
+                    </div>
+                    <!-- Barcode Visual -->
+                    <div class="badge-barcode" title="ADN-2026-BARCODE">
+                      <div class="bar" style="width:1px"></div>
+                      <div class="bar" style="width:3px"></div>
+                      <div class="bar" style="width:2px"></div>
+                      <div class="bar" style="width:1px"></div>
+                      <div class="bar" style="width:4px"></div>
+                      <div class="bar" style="width:2px"></div>
+                      <div class="bar" style="width:1px"></div>
+                      <div class="bar" style="width:3px"></div>
+                      <div class="bar" style="width:2px"></div>
+                      <div class="bar" style="width:1px"></div>
+                      <div class="bar" style="width:3px"></div>
+                      <div class="bar" style="width:2px"></div>
+                      <div class="bar" style="width:4px"></div>
+                      <div class="bar" style="width:1px"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Interactive Pull Hint -->
+              <div id="lanyard-hint" class="lanyard-hint">
+                <i data-lucide="mouse-pointer" style="width:12px;height:12px;stroke:var(--accent)"></i>
+                <span>Tarik kartu</span>
               </div>
             </div>
           </div>
@@ -204,7 +299,7 @@
     </section>
 
     <!-- ABOUT SECTION -->
-    <section id="about" style="padding:80px 0;border-top:1px solid var(--border)">
+    <section id="about" style="padding:80px 0;border-top:1px solid var(--border)" class="reveal">
       <div class="container-page" style="max-width:1200px">
 
         <!-- Section header -->
@@ -275,7 +370,7 @@
     </section>
 
     <!-- EDUCATION SECTION -->
-    <section id="education" style="padding:80px 0;border-top:1px solid var(--border)">
+    <section id="education" style="padding:80px 0;border-top:1px solid var(--border)" class="reveal">
       <div class="container-page" style="max-width:1200px">
         <div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;margin-bottom:56px">
           <span class="section-label">
@@ -293,7 +388,7 @@
     </section>
 
     <!-- TECH STACK & SKILLS SECTION -->
-    <section id="skills" style="padding:80px 0;border-top:1px solid var(--border);background-color:var(--bg-deep)">
+    <section id="skills" style="padding:80px 0;border-top:1px solid var(--border);background-color:var(--bg-deep)" class="reveal">
       <div class="container-page" style="max-width:1200px">
         <div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;margin-bottom:48px">
           <span class="section-label">
@@ -321,7 +416,7 @@
     </section>
 
     <!-- EXPERIENCE SECTION -->
-    <section id="experience" style="padding:80px 0;border-top:1px solid var(--border)">
+    <section id="experience" style="padding:80px 0;border-top:1px solid var(--border)" class="reveal">
       <div class="container-page" style="max-width:1200px">
         <div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;margin-bottom:56px">
           <span class="section-label">
@@ -339,7 +434,7 @@
     </section>
 
     <!-- FEATURED PROJECTS SECTION -->
-    <section id="projects" style="padding:80px 0;border-top:1px solid var(--border);background-color:var(--bg-deep)">
+    <section id="projects" style="padding:80px 0;border-top:1px solid var(--border);background-color:var(--bg-deep)" class="reveal">
       <div class="container-page" style="max-width:1200px">
         <div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;margin-bottom:48px">
           <span class="section-label">
@@ -368,7 +463,7 @@
     </section>
 
     <!-- RESEARCH SECTION -->
-    <section id="research" style="padding:80px 0;border-top:1px solid var(--border)">
+    <section id="research" style="padding:80px 0;border-top:1px solid var(--border)" class="reveal">
       <div class="container-page" style="max-width:1200px">
         <div class="card research-card" style="padding:48px;border-radius:16px;position:relative">
 
@@ -442,7 +537,7 @@
     </section>
 
     <!-- CERTIFICATES SECTION -->
-    <section id="certificates" style="padding:80px 0;border-top:1px solid var(--border);background-color:var(--bg-deep)">
+    <section id="certificates" style="padding:80px 0;border-top:1px solid var(--border);background-color:var(--bg-deep)" class="reveal">
       <div class="container-page" style="max-width:1200px">
         <div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;margin-bottom:56px">
           <span class="section-label">
@@ -460,7 +555,7 @@
     </section>
 
     <!-- TERMINAL EASTER EGG -->
-    <section style="padding:64px 0;border-top:1px solid var(--border)">
+    <section style="padding:64px 0;border-top:1px solid var(--border)" class="reveal">
       <div class="container-page" style="max-width:800px">
         <div class="terminal-window">
           <div class="terminal-header">
@@ -501,7 +596,7 @@
     </section>
 
     <!-- CONTACT SECTION -->
-    <section id="contact" style="padding:80px 0;border-top:1px solid var(--border)">
+    <section id="contact" style="padding:80px 0;border-top:1px solid var(--border)" class="reveal">
       <div class="container-page" style="max-width:1200px">
         <div style="text-align:center;max-width:480px;margin-inline:auto;margin-bottom:56px;display:flex;flex-direction:column;gap:12px">
           <span class="section-label" style="justify-content:center">
@@ -602,6 +697,33 @@
     </div>
   </footer>
 
+  <!-- Scroll Progress Bar -->
+  <div id="scroll-progress"></div>
+
+  <!-- Back to Top -->
+  <button id="back-to-top" aria-label="Kembali ke atas" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+    <i data-lucide="chevron-up" style="width:16px;height:16px"></i>
+  </button>
+
+  <!-- Command Palette -->
+  <div id="cmd-backdrop" role="dialog" aria-modal="true" aria-label="Command palette">
+    <div id="cmd-box">
+      <div id="cmd-search-wrap">
+        <i data-lucide="search" style="width:15px;height:15px;stroke:var(--text-muted);flex-shrink:0"></i>
+        <input type="text" id="cmd-search" placeholder="Cari bagian atau perintah…" autocomplete="off" spellcheck="false" />
+        <span class="kbd" style="font-size:10px;padding:2px 6px">Esc</span>
+      </div>
+      <div id="cmd-results">
+        <!-- Rendered by JS -->
+      </div>
+      <div id="cmd-footer">
+        <span class="cmd-key"><span class="kbd">↑↓</span> navigasi</span>
+        <span class="cmd-key"><span class="kbd">Enter</span> pilih</span>
+        <span class="cmd-key"><span class="kbd">Esc</span> tutup</span>
+      </div>
+    </div>
+  </div>
+
   <!-- Modal Container -->
   <div id="modal-container" class="hidden modal-backdrop" style="display:none">
     <div id="modal-content" class="modal-box">
@@ -610,7 +732,7 @@
   </div>
 
   <!-- Toast -->
-  <div id="toast" style="position:fixed;bottom:24px;right:24px;z-index:100;transform:translateY(12px);opacity:0;transition:transform 200ms var(--ease),opacity 200ms var(--ease)">
+  <div id="toast" style="pointer-events:none">
     <div style="display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--bg-raised);border:1px solid var(--border);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,0.3)">
       <i data-lucide="check" style="width:14px;height:14px;stroke:var(--accent)"></i>
       <span id="toast-message" class="font-mono" style="font-size:12px;color:var(--text-primary)"></span>

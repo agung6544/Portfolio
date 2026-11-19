@@ -789,6 +789,534 @@
   }
 
   // =====================================================================
+  // SCROLL PROGRESS BAR
+  // =====================================================================
+  function initScrollProgress() {
+    const bar = document.getElementById('scroll-progress');
+    if (!bar) return;
+    window.addEventListener('scroll', () => {
+      const scrollTop  = window.scrollY;
+      const docHeight  = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      bar.style.width = pct + '%';
+    }, { passive: true });
+  }
+
+  // =====================================================================
+  // BACK TO TOP BUTTON
+  // =====================================================================
+  function initBackToTop() {
+    const btn = document.getElementById('back-to-top');
+    if (!btn) return;
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 400) btn.classList.add('visible');
+      else                      btn.classList.remove('visible');
+    }, { passive: true });
+    refreshIcons();
+  }
+
+  // =====================================================================
+  // SCROLL REVEAL (IntersectionObserver)
+  // =====================================================================
+  function initScrollReveal() {
+    const els = document.querySelectorAll('.reveal');
+    if (!els.length) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+    els.forEach(el => observer.observe(el));
+  }
+
+  // =====================================================================
+  // STAT COUNTER ANIMATION
+  // =====================================================================
+  function initStatCounters() {
+    // Run when hero stats are in view
+    const statsEl = document.getElementById('hero-stats');
+    if (!statsEl) return;
+
+    function animateCount(el, target, suffix, decimals = 0) {
+      const duration = 1200;
+      const start    = performance.now();
+      const from     = 0;
+
+      function step(now) {
+        const progress = Math.min((now - start) / duration, 1);
+        // ease-out cubic
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const val = from + (target - from) * eased;
+        el.textContent = decimals > 0 ? val.toFixed(decimals) : Math.floor(val).toString();
+        if (progress < 1) requestAnimationFrame(step);
+        else el.textContent = decimals > 0 ? target.toFixed(decimals) : target.toString();
+      }
+      requestAnimationFrame(step);
+    }
+
+    const observer = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting) {
+        observer.disconnect();
+        // Animate each stat
+        const statEls = statsEl.querySelectorAll('.stat-value');
+        const stats   = portfolioData.stats;
+        statEls.forEach((el, i) => {
+          if (!stats[i]) return;
+          const raw = stats[i].value.replace(/[^0-9.]/g, '');
+          const num = parseFloat(raw);
+          if (!isNaN(num)) {
+            const decimals = stats[i].value.includes('.') ? stats[i].value.split('.')[1].length : 0;
+            animateCount(el, num, stats[i].suffix, decimals);
+          }
+        });
+      }
+    }, { threshold: 0.5 });
+
+    observer.observe(statsEl);
+  }
+
+  // =====================================================================
+  // TYPING CURSOR — remove after 3s to stop distraction
+  // =====================================================================
+  function initTypingCursor() {
+    const h1 = document.querySelector('.cursor-blink');
+    if (!h1) return;
+    setTimeout(() => h1.classList.remove('cursor-blink'), 4000);
+  }
+
+  // =====================================================================
+  // COMMAND PALETTE
+  // =====================================================================
+  const CMD_ITEMS = [
+    { label: 'Tentang Saya',   labelEn: 'About',           icon: 'user',           href: '#about',        hint: 'Bagian' },
+    { label: 'Pendidikan',     labelEn: 'Education',        icon: 'graduation-cap', href: '#education',    hint: 'Bagian' },
+    { label: 'Keahlian',       labelEn: 'Skills',           icon: 'cpu',            href: '#skills',       hint: 'Bagian' },
+    { label: 'Pengalaman',     labelEn: 'Experience',       icon: 'briefcase',      href: '#experience',   hint: 'Bagian' },
+    { label: 'Proyek',         labelEn: 'Projects',         icon: 'layers',         href: '#projects',     hint: 'Bagian' },
+    { label: 'Riset ML',       labelEn: 'ML Research',      icon: 'bar-chart-2',    href: '#research',     hint: 'Bagian' },
+    { label: 'Sertifikat',     labelEn: 'Certificates',     icon: 'award',          href: '#certificates', hint: 'Bagian' },
+    { label: 'Kontak',         labelEn: 'Contact',          icon: 'message-square', href: '#contact',      hint: 'Bagian' },
+    { label: 'Unduh CV',       labelEn: 'Download CV',      icon: 'download',       href: 'assets/cv_agung_deriko_nainggolan.pdf', hint: 'Aksi', download: true },
+    { label: 'GitHub',         labelEn: 'GitHub',           icon: 'github',         href: 'https://github.com/agung6544', hint: 'Link', external: true },
+    { label: 'LinkedIn',       labelEn: 'LinkedIn',         icon: 'linkedin',       href: 'https://www.linkedin.com/in/agungderiko-nainggolan/', hint: 'Link', external: true },
+    { label: 'Salin Email',    labelEn: 'Copy Email',       icon: 'copy',           action: () => window.copyToClipboard('agung.nainggolan8008@gmail.com', 'Email disalin!'), hint: 'Aksi' },
+    { label: 'WhatsApp',       labelEn: 'WhatsApp',         icon: 'phone',          href: 'https://wa.me/6282360711385', hint: 'Link', external: true },
+  ];
+
+  let cmdOpen    = false;
+  let cmdSelected = 0;
+  let cmdFiltered = [...CMD_ITEMS];
+
+  window.openCmd = function() {
+    const backdrop = document.getElementById('cmd-backdrop');
+    const input    = document.getElementById('cmd-search');
+    if (!backdrop || !input) return;
+    cmdOpen = true;
+    cmdSelected = 0;
+    cmdFiltered = [...CMD_ITEMS];
+    backdrop.classList.add('open');
+    renderCmdResults(cmdFiltered);
+    setTimeout(() => input.focus(), 50);
+  };
+
+  window.closeCmd = function() {
+    const backdrop = document.getElementById('cmd-backdrop');
+    if (!backdrop) return;
+    cmdOpen = false;
+    backdrop.classList.remove('open');
+    const input = document.getElementById('cmd-search');
+    if (input) input.value = '';
+  };
+
+  function renderCmdResults(items) {
+    const container = document.getElementById('cmd-results');
+    if (!container) return;
+
+    if (!items.length) {
+      container.innerHTML = `<div style="padding:24px;text-align:center;font-size:13px;color:var(--text-muted)">Tidak ada hasil</div>`;
+      return;
+    }
+
+    const lang = localStorage.getItem('agy_portfolio_lang') || 'id';
+    container.innerHTML = items.map((item, i) => `
+      <a
+        class="cmd-item ${i === cmdSelected ? 'selected' : ''}"
+        data-index="${i}"
+        href="${item.href || '#'}"
+        ${item.external ? 'target="_blank" rel="noopener noreferrer"' : ''}
+        ${item.download ? 'download' : ''}
+        onclick="handleCmdSelect(event, ${i})"
+        style="text-decoration:none"
+      >
+        <div class="cmd-item-icon">
+          <i data-lucide="${item.icon}"></i>
+        </div>
+        <span class="cmd-item-label">${lang === 'en' ? item.labelEn : item.label}</span>
+        <span class="cmd-item-hint">${item.hint}</span>
+      </a>
+    `).join('');
+    refreshIcons();
+  }
+
+  window.handleCmdSelect = function(e, idx) {
+    const item = cmdFiltered[idx];
+    if (!item) return;
+    if (item.action) {
+      e.preventDefault();
+      item.action();
+      closeCmd();
+    } else {
+      closeCmd();
+    }
+  };
+
+  function initCommandPalette() {
+    const backdrop = document.getElementById('cmd-backdrop');
+    const input    = document.getElementById('cmd-search');
+    if (!backdrop || !input) return;
+
+    // Keyboard shortcut
+    window.addEventListener('keydown', e => {
+      // Open: Ctrl+K or Cmd+K
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        cmdOpen ? closeCmd() : openCmd();
+        return;
+      }
+      if (!cmdOpen) return;
+
+      if (e.key === 'Escape') { closeCmd(); return; }
+
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        cmdSelected = Math.min(cmdSelected + 1, cmdFiltered.length - 1);
+        renderCmdResults(cmdFiltered);
+        scrollCmdSelected();
+      }
+      if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        cmdSelected = Math.max(cmdSelected - 1, 0);
+        renderCmdResults(cmdFiltered);
+        scrollCmdSelected();
+      }
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const item = cmdFiltered[cmdSelected];
+        if (!item) return;
+        if (item.action) {
+          item.action();
+          closeCmd();
+        } else if (item.href) {
+          if (item.external) {
+            window.open(item.href, '_blank', 'noopener,noreferrer');
+          } else if (item.download) {
+            const a = document.createElement('a');
+            a.href = item.href; a.download = '';
+            a.click();
+          } else {
+            window.location.hash = item.href.replace('#', '');
+          }
+          closeCmd();
+        }
+      }
+    });
+
+    // Filter on type
+    input.addEventListener('input', () => {
+      const q = input.value.toLowerCase().trim();
+      const lang = localStorage.getItem('agy_portfolio_lang') || 'id';
+      cmdFiltered = q
+        ? CMD_ITEMS.filter(item => {
+            const lbl = lang === 'en' ? item.labelEn : item.label;
+            return lbl.toLowerCase().includes(q) || item.hint.toLowerCase().includes(q);
+          })
+        : [...CMD_ITEMS];
+      cmdSelected = 0;
+      renderCmdResults(cmdFiltered);
+    });
+
+    // Close on backdrop click
+    backdrop.addEventListener('click', e => {
+      if (e.target === backdrop) closeCmd();
+    });
+
+    // Hover to select
+    backdrop.addEventListener('mouseover', e => {
+      const item = e.target.closest('.cmd-item');
+      if (!item) return;
+      const idx = parseInt(item.dataset.index, 10);
+      if (!isNaN(idx)) {
+        cmdSelected = idx;
+        renderCmdResults(cmdFiltered);
+      }
+    });
+  }
+
+  function scrollCmdSelected() {
+    const container = document.getElementById('cmd-results');
+    if (!container) return;
+    const selected = container.querySelector('.cmd-item.selected');
+    if (selected) selected.scrollIntoView({ block: 'nearest' });
+  }
+
+  // =====================================================================
+  // SECTION ANCHOR COPY LINK
+  // =====================================================================
+  function initSectionAnchors() {
+    document.querySelectorAll('section[id]').forEach(section => {
+      const id = section.getAttribute('id');
+      const heading = section.querySelector('h2.section-title, h2, h3');
+      if (!heading || !id) return;
+
+      // Don't double-add
+      if (heading.querySelector('.section-anchor-btn')) return;
+
+      const btn = document.createElement('button');
+      btn.className = 'section-anchor-btn';
+      btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>';
+      btn.title = 'Salin link bagian ini';
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const url = `${window.location.origin}${window.location.pathname}#${id}`;
+        window.copyToClipboard(url, 'Link disalin!');
+      });
+      heading.appendChild(btn);
+    });
+  }
+
+  // =====================================================================
+  // INTERACTIVE LANYARD BADGE PHYSICS
+  // =====================================================================
+  function initLanyardBadge() {
+    const rig   = document.getElementById('lanyard-rig');
+    const card  = document.getElementById('lanyard-card');
+    const clasp = document.getElementById('lanyard-clasp');
+    const hint  = document.getElementById('lanyard-hint');
+    const glare = document.getElementById('badge-glare');
+    const path  = document.getElementById('lanyard-path');
+    const pathShadow = document.getElementById('lanyard-path-shadow');
+    const stitchL    = document.getElementById('lanyard-stitch-l');
+    const stitchR    = document.getElementById('lanyard-stitch-r');
+
+    if (!rig || !card || !path) return;
+
+    // Anchor: top-center of the lanyard SVG
+    const ax = 170;
+    const ay = 0;
+
+    // State variables
+    let isDragging = false;
+    let startPointerX = 0, startPointerY = 0;
+    let startPosX = 0, startPosY = 0;
+    let prevPointerX = 0, prevPointerY = 0;
+    let prevTime = performance.now();
+
+    let posX = 0, posY = 0;
+    let velX = 0, velY = 0;
+    let rotZ = 0, velRotZ = 0;
+    let rotX = 0, rotY = 0;
+    let flipAngle = 0, flipVel = 0;
+
+    // Spring constants for elastic damping
+    const kPos = 160;  // position stiffness
+    const dPos = 12;   // position damping
+    const kRot = 180;  // rotation stiffness
+    const dRot = 14;   // rotation damping
+
+    // Render dynamic lanyard strap SVG path
+    function renderStrap(px, py) {
+      // Clasp attach point relative to SVG
+      const cx = 170 + px;
+      const cy = 42 + py;
+
+      // Natural catenary/bezier curve
+      const midX = (ax + cx) / 2 + (px * 0.14);
+      const midY = (ay + cy) / 2 - Math.max(0, -py * 0.22);
+
+      const mainPath = `M ${ax} ${ay} Q ${midX} ${midY} ${cx} ${cy}`;
+      const shadowPath = `M ${ax} ${ay + 4} Q ${midX} ${midY + 6} ${cx} ${cy + 6}`;
+
+      path.setAttribute('d', mainPath);
+      if (pathShadow) pathShadow.setAttribute('d', shadowPath);
+
+      // Dual edge stitch lines offset by normal vector
+      const dx = cx - ax;
+      const dy = cy - ay;
+      const len = Math.hypot(dx, dy) || 1;
+      const nx = -dy / len;
+      const ny = dx / len;
+      const offset = 5.2;
+
+      const lax = ax + nx * offset;
+      const lay = ay + ny * offset;
+      const lcx = cx + nx * offset;
+      const lcy = cy + ny * offset;
+      const lmidX = midX + nx * offset;
+      const lmidY = midY + ny * offset;
+
+      const rax = ax - nx * offset;
+      const ray = ay - ny * offset;
+      const rcx = cx - nx * offset;
+      const rcy = cy - ny * offset;
+      const rmidX = midX - nx * offset;
+      const rmidY = midY - ny * offset;
+
+      if (stitchL) stitchL.setAttribute('d', `M ${lax} ${lay} Q ${lmidX} ${lmidY} ${lcx} ${lcy}`);
+      if (stitchR) stitchR.setAttribute('d', `M ${rax} ${ray} Q ${rmidX} ${rmidY} ${rcx} ${rcy}`);
+    }
+
+    // Pointer events for dragging
+    card.addEventListener('pointerdown', (e) => {
+      if (e.button !== 0 && e.pointerType === 'mouse') return;
+      isDragging = true;
+      card.setPointerCapture(e.pointerId);
+      startPointerX = e.clientX;
+      startPointerY = e.clientY;
+      startPosX = posX;
+      startPosY = posY;
+      prevPointerX = e.clientX;
+      prevPointerY = e.clientY;
+      prevTime = performance.now();
+
+      if (hint) {
+        hint.classList.add('fade-out');
+      }
+    });
+
+    window.addEventListener('pointermove', (e) => {
+      if (isDragging) {
+        const rawDx = e.clientX - startPointerX;
+        const rawDy = e.clientY - startPointerY;
+
+        // Realistic tension resistance when pulled
+        const tensionY = rawDy > 0
+          ? Math.sign(rawDy) * Math.pow(Math.abs(rawDy), 0.88) * 1.5
+          : rawDy * 0.35;
+        const tensionX = Math.sign(rawDx) * Math.pow(Math.abs(rawDx), 0.9) * 1.35;
+
+        posX = Math.max(Math.min(startPosX + tensionX, 150), -150);
+        posY = Math.max(Math.min(startPosY + tensionY, 180), -40);
+
+        // Instant velocity tracking
+        const now = performance.now();
+        const dt = Math.max((now - prevTime) / 1000, 0.001);
+        velX = (e.clientX - prevPointerX) / dt;
+        velY = (e.clientY - prevPointerY) / dt;
+        prevPointerX = e.clientX;
+        prevPointerY = e.clientY;
+        prevTime = now;
+
+        // Card tilts naturally following the hanging lanyard vector
+        const cordAngle = Math.atan2(posX, 100 + posY) * (180 / Math.PI);
+        rotZ = cordAngle;
+        rotX = Math.max(Math.min(-velY * 0.02, 14), -14);
+        rotY = Math.max(Math.min(velX * 0.025, 18), -18);
+      } else {
+        // Subtle 3D perspective tilt on mouse hover
+        const rect = card.getBoundingClientRect();
+        if (
+          e.clientX >= rect.left && e.clientX <= rect.right &&
+          e.clientY >= rect.top && e.clientY <= rect.bottom
+        ) {
+          const cx = (e.clientX - rect.left) / rect.width - 0.5;
+          const cy = (e.clientY - rect.top) / rect.height - 0.5;
+          rotX += (-cy * 14 - rotX) * 0.12;
+          rotY += (cx * 18 - rotY) * 0.12;
+        }
+      }
+    });
+
+    function endDrag(e) {
+      if (!isDragging) return;
+      isDragging = false;
+      try { card.releasePointerCapture(e.pointerId); } catch (_) {}
+      velX = Math.max(Math.min(velX * 0.55, 800), -800);
+      velY = Math.max(Math.min(velY * 0.55, 800), -800);
+    }
+
+    card.addEventListener('pointerup', endDrag);
+    card.addEventListener('pointercancel', endDrag);
+    card.addEventListener('lostpointercapture', endDrag);
+
+    // Double-click or double-tap to spin
+    card.addEventListener('dblclick', () => {
+      flipVel = 720;
+    });
+
+    // Animation physics loop
+    let lastFrame = performance.now();
+    function loop(now) {
+      const dt = Math.min((now - lastFrame) / 1000, 0.035);
+      lastFrame = now;
+
+      if (!isDragging) {
+        // Natural ambient pendulum breathing when at rest
+        const t = now * 0.0016;
+        const idleX = Math.sin(t) * 1.5;
+        const idleY = Math.cos(t * 1.3) * 1.2;
+        const idleRot = Math.sin(t * 0.8) * 1.0;
+
+        // Elastic spring forces toward center
+        const fx = -kPos * (posX - idleX) - dPos * velX;
+        const fy = -kPos * (posY - idleY) - dPos * velY;
+
+        velX += fx * dt;
+        velY += fy * dt;
+        posX += velX * dt;
+        posY += velY * dt;
+
+        // Pendulum rotation tracking
+        const cordAngle = Math.atan2(posX, 100 + posY) * (180 / Math.PI);
+        const targetRotZ = cordAngle + idleRot;
+        const fRot = -kRot * (rotZ - targetRotZ) - dRot * velRotZ;
+        velRotZ += fRot * dt;
+        rotZ += velRotZ * dt;
+
+        // Relax 3D tilt back to level
+        rotX += (0 - rotX) * (dt * 6);
+        rotY += (0 - rotY) * (dt * 6);
+      }
+
+      // Handle card flip spin animation
+      if (Math.abs(flipVel) > 1 || Math.abs(flipAngle % 360) > 1) {
+        flipAngle += flipVel * dt;
+        flipVel -= flipVel * dt * 4;
+        if (Math.abs(flipVel) < 10) {
+          flipAngle += (Math.round(flipAngle / 360) * 360 - flipAngle) * dt * 10;
+        }
+      }
+
+      // Apply transforms
+      card.style.transform = `translate3d(${posX.toFixed(2)}px, ${posY.toFixed(2)}px, 0) rotateZ(${rotZ.toFixed(2)}deg) rotateX(${rotX.toFixed(2)}deg) rotateY(${(rotY + flipAngle).toFixed(2)}deg)`;
+
+      if (clasp) {
+        clasp.style.transform = `translateX(-50%) translate3d(${posX.toFixed(2)}px, ${posY.toFixed(2)}px, 0) rotateZ(${(rotZ * 0.95).toFixed(2)}deg)`;
+      }
+
+      // Glare reflection positioning
+      if (glare) {
+        const gx = 50 + (rotY * 2.5);
+        const gy = 25 + (-rotX * 2.5);
+        card.style.setProperty('--glare-x', `${gx.toFixed(1)}%`);
+        card.style.setProperty('--glare-y', `${gy.toFixed(1)}%`);
+      }
+
+      // Render ribbon curve
+      renderStrap(posX, posY);
+
+      requestAnimationFrame(loop);
+    }
+
+    renderStrap(0, 0);
+    requestAnimationFrame(loop);
+  }
+
+  // =====================================================================
   // INIT
   // =====================================================================
   document.addEventListener('DOMContentLoaded', () => {
@@ -799,7 +1327,18 @@
     initMobileMenu();
     initResponsiveHero();
     initResponsiveGrids();
+    initResponsiveLayouts();
     initResearchHover();
+
+    // New features
+    initScrollProgress();
+    initBackToTop();
+    initScrollReveal();
+    initStatCounters();
+    initTypingCursor();
+    initCommandPalette();
+    initSectionAnchors();
+    initLanyardBadge();
   });
 
 })();
